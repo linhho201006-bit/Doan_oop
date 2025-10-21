@@ -1,0 +1,5 @@
+Linh1204|nghi@13289|admin|NV001
+Luong2209|luog@13504|quanly|NV002
+Kiet2942|kiet@19223|nhanvien|NV003
+Luan9264|luan@79294|nhanvien|NV004
+khang0529|Nghi@13289|nhanvien|NV005

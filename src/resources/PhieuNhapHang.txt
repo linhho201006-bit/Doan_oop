@@ -1,0 +1,7 @@
+PNH001|NCC002|12-04-2025|14-04-2025|   |Đã thanh toán
+PNH002|NCC003|17-04-2025|19-04-2025|   |Đã thanh toán
+PNH003|NCC001|18-10-2025|null|   |Chưa thanh toán
+PNH004|NCC004|12-04-2025|null|   |Chưa thanh toán
+PNH005|NCC002|18-10-2025|null|   |Đã hủy
+
+
