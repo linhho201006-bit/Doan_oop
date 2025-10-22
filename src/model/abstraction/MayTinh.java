@@ -6,7 +6,8 @@ public abstract class MayTinh {
     protected double gia;
     protected String hangSX;
 
-    public MayTinh() {}
+    public MayTinh() {
+    }
 
     public MayTinh(String maMay, String tenMay, double gia, String hangSX) {
         this.maMay = maMay;
@@ -15,9 +16,9 @@ public abstract class MayTinh {
         this.hangSX = hangSX;
     }
 
-    //Getter and Setter
-    public String getMaMay(){
-        return maMay;               
+    // Getter and Setter
+    public String getMaMay() {
+        return maMay;
     }
 
     public String getTenMay() {
@@ -43,7 +44,7 @@ public abstract class MayTinh {
     public void setGia(double gia) {
         this.gia = gia;
     }
-    
+
     public void setHangSX(String hangSX) {
         this.hangSX = hangSX;
     }
@@ -54,6 +55,3 @@ public abstract class MayTinh {
     }
 
 }
-
-
-

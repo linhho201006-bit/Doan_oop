@@ -8,9 +8,10 @@ public class NhanVien {
     private String diaChi;
     private String SDT;
 
-    public NhanVien(){};
+    public NhanVien() {
+    };
 
-    public NhanVien(String maNV, String hoTen,String vaiTro, Double luong, String diaChi, String SDT) {
+    public NhanVien(String maNV, String hoTen, String vaiTro, Double luong, String diaChi, String SDT) {
         this.maNV = maNV;
         this.hoTen = hoTen;
         this.luong = luong;
@@ -18,7 +19,7 @@ public class NhanVien {
         this.SDT = SDT;
     }
 
-    //Getter and Setter
+    // Getter and Setter
     public String getMaNV() {
         return maNV;
     }
@@ -43,10 +44,14 @@ public class NhanVien {
         this.vaiTro = vaiTro;
     }
 
-    public Double getLuong(){
+    public Double getLuong() {
         return luong;
     }
-    
+
+    public void setLuong(Double luong) {
+        this.luong = luong;
+    }
+
     public String getDiachi() {
         return diaChi;
     }
@@ -62,10 +67,10 @@ public class NhanVien {
     public void setSdt(String SDT) {
         this.SDT = SDT;
     }
+
     @Override
     public String toString() {
         return "NhanVien [maNV:" + maNV + ", hoTen:" + hoTen + ", vaiTro:" + vaiTro +
-         ", luong:" + luong + ", diaChi:" + diaChi + ", SDT:" + SDT + "]";
+                ", luong:" + luong + ", diaChi:" + diaChi + ", SDT:" + SDT + "]";
     }
 }
-

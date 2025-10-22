@@ -57,9 +57,6 @@ public interface ChiTietHoaDonService {
     // Tính thành tiền trung bình
     Double tinhThanhTienTrungBinh();
 
-    // Thống kê chi tiết hóa đơn theo vé
-    List<ChiTietHoaDon> thongKeChiTietHoaDonTheoVe();
-
     // Thống kê chi tiết hóa đơn theo khách hàng
     List<ChiTietHoaDon> thongKeChiTietHoaDonTheoKhachHang();
 }

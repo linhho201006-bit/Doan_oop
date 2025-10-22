@@ -4,6 +4,7 @@ import java.util.List;
 import model.HoaDon;
 
 public interface HoaDonService {
+
     // Tạo hóa đơn mới
     boolean taoHoaDon(HoaDon hoaDon);
 

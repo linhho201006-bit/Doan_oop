@@ -4,6 +4,7 @@ import java.util.List;
 import model.KhachHang;
 
 public interface KhachHangService {
+
     // Thêm khách hàng mới
     boolean themKhachHang(KhachHang khachHang);
 
