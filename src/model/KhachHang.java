@@ -11,19 +11,21 @@ public class KhachHang {
     private Date ngaySinh;
     private String SDT;
 
-    public KhachHang(){}
+    public KhachHang() {
+    }
 
-    public KhachHang(String maKH, String hoTen, String gioiTinh, String CMND, String diaChi, Date ngaySinh, String SDT) {
+    public KhachHang(String maKH, String hoTen, Date ngaySinh, String gioiTinh, String diaChi, String CMND,
+            String SDT) {
         this.maKH = maKH;
         this.hoTen = hoTen;
-        this.gioiTinh = gioiTinh;
-        this.CMND = CMND;
-        this.diaChi = diaChi;
         this.ngaySinh = ngaySinh;
+        this.gioiTinh = gioiTinh;
+        this.diaChi = diaChi;
+        this.CMND = CMND;
         this.SDT = SDT;
     }
 
-    //Getter and Setter
+    // Getter and Setter
     public String getMaKH() {
         return maKH;
     }
@@ -79,12 +81,12 @@ public class KhachHang {
     public void setSDT(String SDT) {
         this.SDT = SDT;
     }
-    
+
     @Override
     public String toString() {
-        return "KhachHang [maKH:" + maKH + ", hoTen:" + hoTen + 
-        ", gioiTinh:" + gioiTinh + ", CMND:" + CMND + ", diaChi:" + diaChi + 
-        ", ngaySinh:" + ngaySinh + ", SDT:" + SDT + "]";
+        return "KhachHang [maKH:" + maKH + ", hoTen:" + hoTen +
+                ", ngaySinh:" + ngaySinh + ", gioiTinh:" + gioiTinh + ", diaChi:" + diaChi +
+                ", CMND:" + CMND + ", SDT:" + SDT + "]";
 
-}
+    }
 }

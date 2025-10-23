@@ -12,16 +12,16 @@ public interface KhachHangService {
     List<KhachHang> layTatCaKhachHang();
 
     // Tìm khách hàng theo mã
-    KhachHang timKhachHangTheoMa(String maKh);
+    KhachHang timKhachHangTheoMa(String maKH);
 
     // Tìm khách hàng theo họ tên
     List<KhachHang> timKhachHangTheoHoTen(String hoTen);
 
     // Tìm khách hàng theo CMND
-    List<KhachHang> timKhachHangTheoCMND(String cmnd);
+    List<KhachHang> timKhachHangTheoCMND(String CMND);
 
     // Tìm khách hàng theo SĐT
-    List<KhachHang> timKhachHangTheoSDT(String sdt);
+    List<KhachHang> timKhachHangTheoSDT(String SDT);
 
     // Tìm kiếm tổng hợp
     List<KhachHang> timKiemKhachHang(String tuKhoa);
@@ -30,5 +30,5 @@ public interface KhachHangService {
     boolean capNhatKhachHang(KhachHang khachHang);
 
     // Xóa khách hàng
-    boolean xoaKhachHang(String maKh);
+    boolean xoaKhachHang(String maKH);
 }

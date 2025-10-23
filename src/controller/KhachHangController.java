@@ -1,7 +1,6 @@
 package controller;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.sql.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -10,245 +9,273 @@ import service.KhachHangService;
 import service.Impl.KhachHangServiceImpl;
 
 public class KhachHangController {
-
     private KhachHangService khachHangService;
     private Scanner scanner;
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     public KhachHangController() {
         khachHangService = new KhachHangServiceImpl();
         scanner = new Scanner(System.in);
     }
 
-    // ================= MENU CHÍNH =================
+    // Hiển thị menu chính
     public void hienThiMenu() {
         while (true) {
             System.out.println("\n=== QUẢN LÝ KHÁCH HÀNG ===");
-            System.out.println("1. Thêm khách hàng");
-            System.out.println("2. Hiển thị danh sách khách hàng");
+            System.out.println("1. Thêm khách hàng mới");
+            System.out.println("2. Hiển thị tất cả khách hàng");
             System.out.println("3. Tìm kiếm khách hàng");
-            System.out.println("4. Cập nhật khách hàng");
+            System.out.println("4. Cập nhật thông tin khách hàng");
             System.out.println("5. Xóa khách hàng");
-            System.out.println("6. Thống kê khách hàng");
             System.out.println("0. Thoát");
             System.out.print("Chọn chức năng: ");
 
             int choice = scanner.nextInt();
-            scanner.nextLine(); // bỏ trôi dòng
+            scanner.nextLine(); // Đọc ký tự newline còn lại
 
             switch (choice) {
-                case 1 -> themKhachHang();
-                case 2 -> hienThiTatCaKhachHang();
-                case 3 -> timKiemKhachHang();
-                case 4 -> capNhatKhachHang();
-                case 5 -> xoaKhachHang();
-                case 6 -> thongKeKhachHang();
-                case 0 -> {
-                    System.out.println("Đã thoát khỏi chương trình quản lý khách hàng!");
+                case 1:
+                    themKhachHang();
+                    break;
+                case 2:
+                    hienThiTatCaKhachHang();
+                    break;
+                case 3:
+                    timKiemKhachHang();
+                    break;
+                case 4:
+                    capNhatKhachHang();
+                    break;
+                case 5:
+                    xoaKhachHang();
+                    break;
+                case 0:
+                    System.out.println("Cảm ơn bạn đã sử dụng chương trình!");
                     return;
-                }
-                default -> System.out.println("Lựa chọn không hợp lệ!");
+                default:
+                    System.out.println("Lựa chọn không hợp lệ!");
             }
         }
     }
 
-    // ================= 1. THÊM KHÁCH HÀNG =================
+    // Thêm khách hàng mới
     private void themKhachHang() {
         System.out.println("\n=== THÊM KHÁCH HÀNG MỚI ===");
 
-        System.out.print("Nhập họ tên: ");
+        System.out.print("Nhập họ và tên: ");
         String hoTen = scanner.nextLine();
-        System.out.print("Nhập giới tính (Nam/Nữ): ");
+
+        System.out.print("Nhập ngày sinh (yyyy-mm-dd): ");
+        String ngaySinhStr = scanner.nextLine();
+        Date ngaySinh = Date.valueOf(ngaySinhStr);
+
+        System.out.print("Nhập giới tính: ");
         String gioiTinh = scanner.nextLine();
-        System.out.print("Nhập CMND: ");
-        String cmnd = scanner.nextLine();
+
         System.out.print("Nhập địa chỉ: ");
         String diaChi = scanner.nextLine();
-        System.out.print("Nhập ngày sinh (yyyy-MM-dd): ");
-        String ngaySinhStr = scanner.nextLine();
 
-        java.util.Date utilDate;
-        try {
-            utilDate = sdf.parse(ngaySinhStr);
-        } catch (ParseException e) {
-            System.out.println("Ngày sinh không hợp lệ!");
-            return;
-        }
-
-        // 🔥 CHUYỂN từ java.util.Date sang java.sql.Date
-        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+        System.out.print("Nhập CMND: ");
+        String CMND = scanner.nextLine();
 
         System.out.print("Nhập số điện thoại: ");
-        String sdt = scanner.nextLine();
+        String SDT = scanner.nextLine();
 
-        // ✅ Dùng sqlDate (đúng kiểu với model)
-        KhachHang kh = new KhachHang("", hoTen, gioiTinh, cmnd, diaChi, sqlDate, sdt);
+        KhachHang khachHang = new KhachHang("", hoTen, ngaySinh, gioiTinh, diaChi, CMND, SDT);
 
-        if (khachHangService.themKhachHang(kh)) {
-            System.out.println("Thêm khách hàng thành công! Mã KH: " + kh.getMaKH());
+        if (khachHangService.themKhachHang(khachHang)) {
+            System.out.println("Thêm khách hàng thành công! Mã khách hàng: " + khachHang.getMaKH());
         } else {
-            System.out.println("Thêm khách hàng thất bại!");
+            System.out.println("Lỗi khi thêm khách hàng!");
         }
     }
 
-    // ================= 2. HIỂN THỊ DANH SÁCH =================
+    // Hiển thị tất cả khách hàng
     private void hienThiTatCaKhachHang() {
-        System.out.println("\n=== DANH SÁCH KHÁCH HÀNG ===");
-        List<KhachHang> ds = khachHangService.layTatCaKhachHang();
+        System.out.println("\n=== DANH SÁCH TẤT CẢ KHÁCH HÀNG ===");
+        List<KhachHang> danhSach = khachHangService.layTatCaKhachHang();
 
-        if (ds.isEmpty()) {
-            System.out.println("Không có khách hàng nào trong danh sách!");
-            return;
-        }
+        if (danhSach.isEmpty()) {
+            System.out.println("Không có khách hàng nào!");
+        } else {
+            System.out.printf("%-8s %-20s %-12s %-8s %-20s %-15s %-12s%n",
+                    "Mã KH", "Họ tên", "Ngày sinh", "Giới tính", "Địa chỉ", "CMND", "SĐT");
+            System.out.println("=".repeat(100));
 
-        System.out.printf("%-10s %-20s %-10s %-15s %-20s %-15s %-12s%n",
-                "Mã KH", "Họ tên", "Giới tính", "CMND", "Địa chỉ", "Ngày sinh", "SĐT");
-
-        for (KhachHang kh : ds) {
-            System.out.printf("%-10s %-20s %-10s %-15s %-20s %-15s %-12s%n",
-                    kh.getMaKH(), kh.getHoTen(), kh.getGioiTinh(), kh.getCMND(),
-                    kh.getDiaChi(), sdf.format(kh.getNgaySinh()), kh.getSDT());
+            for (KhachHang kh : danhSach) {
+                System.out.printf("%-8s %-20s %-12s %-8s %-20s %-15s %-12s%n",
+                        kh.getMaKH(),
+                        kh.getHoTen(),
+                        kh.getNgaySinh(),
+                        kh.getGioiTinh(),
+                        kh.getDiaChi(),
+                        kh.getCMND(),
+                        kh.getSDT());
+            }
         }
     }
 
-    // ================= 3. TÌM KIẾM =================
+    // Tìm kiếm khách hàng
     private void timKiemKhachHang() {
         System.out.println("\n=== TÌM KIẾM KHÁCH HÀNG ===");
-        System.out.println("1. Theo mã khách hàng");
-        System.out.println("2. Theo họ tên");
-        System.out.println("3. Theo CMND");
-        System.out.println("4. Theo số điện thoại");
-        System.out.print("Chọn: ");
-        int c = scanner.nextInt();
+        System.out.println("1. Tìm theo mã khách hàng");
+        System.out.println("2. Tìm theo họ tên");
+        System.out.println("3. Tìm theo CMND");
+        System.out.println("4. Tìm theo số điện thoại");
+        System.out.println("5. Tìm kiếm tổng hợp");
+        System.out.print("Chọn loại tìm kiếm: ");
+
+        int choice = scanner.nextInt();
         scanner.nextLine();
 
-        switch (c) {
-            case 1 -> {
+        List<KhachHang> ketQua = null;
+
+        switch (choice) {
+            case 1:
                 System.out.print("Nhập mã khách hàng: ");
-                String ma = scanner.nextLine();
-                KhachHang kh = khachHangService.timKhachHangTheoMa(ma);
-                if (kh != null)
-                    hienThiThongTinKhachHang(kh);
-                else
-                    System.out.println("Không tìm thấy khách hàng!");
-            }
-            case 2 -> {
+                String maKH = scanner.nextLine();
+                KhachHang kh = khachHangService.timKhachHangTheoMa(maKH);
+                if (kh != null) {
+                    ketQua = List.of(kh);
+                } else {
+                    ketQua = List.of();
+                }
+                break;
+            case 2:
                 System.out.print("Nhập họ tên: ");
-                String ten = scanner.nextLine();
-                List<KhachHang> ds = khachHangService.timKhachHangTheoHoTen(ten);
-                if (ds.isEmpty())
-                    System.out.println("Không tìm thấy khách hàng!");
-                else
-                    ds.forEach(this::hienThiThongTinKhachHang);
-            }
-            case 3 -> {
+                String hoTen = scanner.nextLine();
+                ketQua = khachHangService.timKhachHangTheoHoTen(hoTen);
+                break;
+            case 3:
                 System.out.print("Nhập CMND: ");
                 String cmnd = scanner.nextLine();
-                List<KhachHang> ds = khachHangService.timKhachHangTheoCMND(cmnd);
-                if (ds.isEmpty())
-                    System.out.println("Không tìm thấy khách hàng!");
-                else
-                    ds.forEach(this::hienThiThongTinKhachHang);
-            }
-            case 4 -> {
-                System.out.print("Nhập SĐT: ");
+                ketQua = khachHangService.timKhachHangTheoCMND(cmnd);
+                break;
+            case 4:
+                System.out.print("Nhập số điện thoại: ");
                 String sdt = scanner.nextLine();
-                List<KhachHang> ds = khachHangService.timKhachHangTheoSDT(sdt);
-                if (ds.isEmpty())
-                    System.out.println("Không tìm thấy khách hàng!");
-                else
-                    ds.forEach(this::hienThiThongTinKhachHang);
+                ketQua = khachHangService.timKhachHangTheoSDT(sdt);
+                break;
+            case 5:
+                System.out.print("Nhập từ khóa tìm kiếm: ");
+                String tuKhoa = scanner.nextLine();
+                ketQua = khachHangService.timKiemKhachHang(tuKhoa);
+                break;
+            default:
+                System.out.println("Lựa chọn không hợp lệ!");
+                return;
+        }
+
+        hienThiKetQuaTimKiem(ketQua);
+    }
+
+    // Hiển thị kết quả tìm kiếm
+    private void hienThiKetQuaTimKiem(List<KhachHang> ketQua) {
+        if (ketQua == null || ketQua.isEmpty()) {
+            System.out.println("Không tìm thấy khách hàng nào!");
+        } else {
+            System.out.println("\nKết quả tìm kiếm:");
+            System.out.printf("%-8s %-20s %-12s %-8s %-20s %-15s %-12s%n",
+                    "Mã KH", "Họ tên", "Ngày sinh", "Giới tính", "Địa chỉ", "CMND", "SĐT");
+            System.out.println("=".repeat(100));
+
+            for (KhachHang kh : ketQua) {
+                System.out.printf("%-8s %-20s %-12s %-8s %-20s %-15s %-12s%n",
+                        kh.getMaKH(),
+                        kh.getHoTen(),
+                        kh.getNgaySinh(),
+                        kh.getGioiTinh(),
+                        kh.getDiaChi(),
+                        kh.getCMND(),
+                        kh.getSDT());
             }
-            default -> System.out.println("Lựa chọn không hợp lệ!");
         }
     }
 
-    // ================= 4. CẬP NHẬT =================
+    // Cập nhật thông tin khách hàng
     private void capNhatKhachHang() {
-        System.out.println("\n=== CẬP NHẬT KHÁCH HÀNG ===");
+        System.out.println("\n=== CẬP NHẬT THÔNG TIN KHÁCH HÀNG ===");
         System.out.print("Nhập mã khách hàng cần cập nhật: ");
-        String ma = scanner.nextLine();
+        String maKh = scanner.nextLine();
 
-        KhachHang kh = khachHangService.timKhachHangTheoMa(ma);
-        if (kh == null) {
-            System.out.println("Không tìm thấy khách hàng!");
+        KhachHang khachHang = khachHangService.timKhachHangTheoMa(maKh);
+        if (khachHang == null) {
+            System.out.println("Không tìm thấy khách hàng với mã: " + maKh);
             return;
         }
 
-        System.out.println("Để trống nếu không muốn thay đổi:");
+        System.out.println("Thông tin hiện tại:");
+        System.out.println(khachHang);
 
-        System.out.print("Họ tên (" + kh.getHoTen() + "): ");
-        String ten = scanner.nextLine();
-        if (!ten.isEmpty())
-            kh.setHoTen(ten);
+        System.out.println("\nNhập thông tin mới (để trống nếu không thay đổi):");
 
-        System.out.print("Giới tính (" + kh.getGioiTinh() + "): ");
-        String gt = scanner.nextLine();
-        if (!gt.isEmpty())
-            kh.setGioiTinh(gt);
-
-        System.out.print("CMND (" + kh.getCMND() + "): ");
-        String cmnd = scanner.nextLine();
-        if (!cmnd.isEmpty())
-            kh.setCMND(cmnd);
-
-        System.out.print("Địa chỉ (" + kh.getDiaChi() + "): ");
-        String diaChi = scanner.nextLine();
-        if (!diaChi.isEmpty())
-            kh.setDiaChi(diaChi);
-
-        System.out.print("Ngày sinh (" + sdf.format(kh.getNgaySinh()) + "): ");
-        String ngayStr = scanner.nextLine();
-        if (!ngayStr.isEmpty()) {
-            try {
-                java.util.Date utilDate = sdf.parse(ngayStr);
-                java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-                kh.setNgaySinh(sqlDate);
-            } catch (ParseException e) {
-                System.out.println("Ngày sinh không hợp lệ!");
-            }
+        System.out.print("Họ và tên [" + khachHang.getHoTen() + "]: ");
+        String hoTen = scanner.nextLine();
+        if (!hoTen.trim().isEmpty()) {
+            khachHang.setHoTen(hoTen);
         }
 
-        System.out.print("SĐT (" + kh.getSDT() + "): ");
-        String sdt = scanner.nextLine();
-        if (!sdt.isEmpty())
-            kh.setSDT(sdt);
+        System.out.print("Ngày sinh [" + khachHang.getNgaySinh() + "] (yyyy-mm-dd): ");
+        String ngaySinhStr = scanner.nextLine();
+        if (!ngaySinhStr.trim().isEmpty()) {
+            khachHang.setNgaySinh(Date.valueOf(ngaySinhStr));
+        }
 
-        if (khachHangService.capNhatKhachHang(kh))
-            System.out.println("Cập nhật khách hàng thành công!");
-        else
-            System.out.println("Cập nhật thất bại!");
+        System.out.print("Giới tính [" + khachHang.getGioiTinh() + "]: ");
+        String gioiTinh = scanner.nextLine();
+        if (!gioiTinh.trim().isEmpty()) {
+            khachHang.setGioiTinh(gioiTinh);
+        }
+
+        System.out.print("Địa chỉ [" + khachHang.getDiaChi() + "]: ");
+        String diaChi = scanner.nextLine();
+        if (!diaChi.trim().isEmpty()) {
+            khachHang.setDiaChi(diaChi);
+        }
+
+        System.out.print("CMND [" + khachHang.getCMND() + "]: ");
+        String cmnd = scanner.nextLine();
+        if (!cmnd.trim().isEmpty()) {
+            khachHang.setCMND(cmnd);
+        }
+
+        System.out.print("Số điện thoại [" + khachHang.getSDT() + "]: ");
+        String sdt = scanner.nextLine();
+        if (!sdt.trim().isEmpty()) {
+            khachHang.setSDT(sdt);
+        }
+
+        if (khachHangService.capNhatKhachHang(khachHang)) {
+            System.out.println("Cập nhật thông tin khách hàng thành công!");
+        } else {
+            System.out.println("Lỗi khi cập nhật thông tin khách hàng!");
+        }
     }
 
-    // ================= 5. XÓA =================
+    // Xóa khách hàng
     private void xoaKhachHang() {
         System.out.println("\n=== XÓA KHÁCH HÀNG ===");
         System.out.print("Nhập mã khách hàng cần xóa: ");
-        String ma = scanner.nextLine();
+        String maKh = scanner.nextLine();
 
-        if (khachHangService.xoaKhachHang(ma))
-            System.out.println("Đã xóa khách hàng " + ma);
-        else
-            System.out.println("Xóa thất bại hoặc mã không tồn tại!");
-    }
+        KhachHang khachHang = khachHangService.timKhachHangTheoMa(maKh);
+        if (khachHang == null) {
+            System.out.println("Không tìm thấy khách hàng với mã: " + maKh);
+            return;
+        }
 
-    // ================= 6. THỐNG KÊ =================
-    private void thongKeKhachHang() {
-        List<KhachHang> ds = khachHangService.layTatCaKhachHang();
-        System.out.println("\n=== THỐNG KÊ KHÁCH HÀNG ===");
-        System.out.println("Tổng số khách hàng: " + ds.size());
+        System.out.println("Thông tin khách hàng sẽ bị xóa:");
+        System.out.println(khachHang);
+        System.out.print("Bạn có chắc chắn muốn xóa? (y/n): ");
+        String confirm = scanner.nextLine();
 
-        long soNam = ds.stream().filter(kh -> kh.getGioiTinh().equalsIgnoreCase("Nam")).count();
-        long soNu = ds.stream().filter(kh -> kh.getGioiTinh().equalsIgnoreCase("Nữ")).count();
-
-        System.out.println("Số khách hàng Nam: " + soNam);
-        System.out.println("Số khách hàng Nữ: " + soNu);
-    }
-
-    // ================= HÀM PHỤ =================
-    private void hienThiThongTinKhachHang(KhachHang kh) {
-        System.out.printf("%-10s %-20s %-10s %-15s %-20s %-15s %-12s%n",
-                kh.getMaKH(), kh.getHoTen(), kh.getGioiTinh(), kh.getCMND(),
-                kh.getDiaChi(), sdf.format(kh.getNgaySinh()), kh.getSDT());
+        if (confirm.toLowerCase().equals("y") || confirm.toLowerCase().equals("yes")) {
+            if (khachHangService.xoaKhachHang(maKh)) {
+                System.out.println("Xóa khách hàng thành công!");
+            } else {
+                System.out.println("Lỗi khi xóa khách hàng!");
+            }
+        } else {
+            System.out.println("Hủy bỏ việc xóa khách hàng.");
+        }
     }
 }

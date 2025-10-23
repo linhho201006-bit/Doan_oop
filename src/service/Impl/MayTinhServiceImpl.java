@@ -173,10 +173,10 @@ public class MayTinhServiceImpl implements MayTinhService {
     }
 
     @Override
-    public List<LapTop> timKiemLapTopTheoKichThuocManHinh(double kichThuocManHinh) {
+    public List<LapTop> timKiemLapTopTheoTrongLuong(double trongLuong) {
         List<LapTop> ketQua = new ArrayList<>();
         for (LapTop lap : danhSachLapTop) {
-            if (lap.getKichThuocManHinh() == kichThuocManHinh) {
+            if (lap.getTrongLuong() == trongLuong) {
                 ketQua.add(lap);
             }
         }
@@ -184,10 +184,10 @@ public class MayTinhServiceImpl implements MayTinhService {
     }
 
     @Override
-    public List<LapTop> timKiemLapTopTheoLoaiPin(String loaiPin) {
+    public List<LapTop> timKiemLapTopTheoKichThuocManHinh(double kichThuocManHinh) {
         List<LapTop> ketQua = new ArrayList<>();
         for (LapTop lap : danhSachLapTop) {
-            if (lap.getLoaiPin().toLowerCase().contains(loaiPin.toLowerCase())) {
+            if (lap.getKichThuocManHinh() == kichThuocManHinh) {
                 ketQua.add(lap);
             }
         }
@@ -211,8 +211,7 @@ public class MayTinhServiceImpl implements MayTinhService {
         for (LapTop lap : danhSachLapTop) {
             if (lap.getMaLapTop().toLowerCase().contains(tk) ||
                     lap.getTenMay().toLowerCase().contains(tk) ||
-                    lap.getHangSX().toLowerCase().contains(tk) ||
-                    lap.getLoaiPin().toLowerCase().contains(tk)) {
+                    lap.getHangSX().toLowerCase().contains(tk)) {
                 ketQua.add(lap);
             }
         }
@@ -322,8 +321,8 @@ public class MayTinhServiceImpl implements MayTinhService {
                         lap.getTenMay() + "|" +
                         lap.getHangSX() + "|" +
                         lap.getGia() + "|" +
-                        lap.getKichThuocManHinh() + "|" +
-                        lap.getLoaiPin());
+                        lap.getTrongLuong() + "|" +
+                        lap.getKichThuocManHinh());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -343,12 +342,12 @@ public class MayTinhServiceImpl implements MayTinhService {
                 String[] p = line.split("\\|");
                 if (p.length == 6) {
                     PC pc = new PC(
+                            p[0], // maPC
                             p[1], // tenMay
                             p[2], // hangSX
                             Double.parseDouble(p[3]), // gia
                             Integer.parseInt(p[4]), // ram
-                            p[5], // loaiCPU
-                            p[0] // maPC
+                            p[5] // loaiCPU
                     );
                     danhSachPC.add(pc);
                     if (p[0].startsWith("PC")) {
@@ -377,12 +376,13 @@ public class MayTinhServiceImpl implements MayTinhService {
                 String[] p = line.split("\\|");
                 if (p.length == 6) {
                     LapTop lap = new LapTop(
+                            p[0], // maLapTop
                             p[1], // tenMay
                             p[2], // hangSX
                             Double.parseDouble(p[3]), // gia
-                            Double.parseDouble(p[4]), // kichThuocManHinh
-                            p[5], // loaiPin
-                            p[0] // maLapTop
+                            Double.parseDouble(p[4]), // trongluong
+                            Double.parseDouble(p[5]) // kichThuocManHinh
+
                     );
                     danhSachLapTop.add(lap);
                     if (p[0].startsWith("LT")) {

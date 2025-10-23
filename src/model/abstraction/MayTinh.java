@@ -9,11 +9,11 @@ public abstract class MayTinh {
     public MayTinh() {
     }
 
-    public MayTinh(String maMay, String tenMay, double gia, String hangSX) {
+    public MayTinh(String maMay, String tenMay, String hangSX, double gia) {
         this.maMay = maMay;
         this.tenMay = tenMay;
-        this.gia = gia;
         this.hangSX = hangSX;
+        this.gia = gia;
     }
 
     // Getter and Setter
@@ -51,7 +51,7 @@ public abstract class MayTinh {
 
     @Override
     public String toString() {
-        return "MayTinh [Ma may: " + maMay + " Ten may: " + tenMay + " Gia: " + gia + " Hang san xuat: " + hangSX + "]";
+        return "MayTinh [Ma may: " + maMay + " Ten may: " + tenMay + " Hang san xuat: " + hangSX + " Gia: " + gia + "]";
     }
 
 }

@@ -3,72 +3,87 @@ package model;
 public class ChiTietHoaDon {
     private String maCTHD;
     private String maHD;
-    private String maSP;
+    private String maMay;
+    private String maKH;
     private double donGia;
     private int soLuong;
     private double thanhTien;
-    
-    public ChiTietHoaDon(){}
 
-    public ChiTietHoaDon(String maCTHD,String maHD,String maSP,double donGia,int soLuong,double thanhTien){
-         this.maCTHD = maCTHD;
-         this.maHD =maHD;
-         this.maSP =maSP;
-         this.donGia =donGia;
-         this.soLuong =soLuong;
-         this.thanhTien =thanhTien;
-         this.thanhTien =donGia*soLuong;
+    public ChiTietHoaDon() {
+    }
+
+    public ChiTietHoaDon(String maCTHD, String maHD, String maMay, String maKH, double donGia, int soLuong,
+            double thanhTien) {
+        this.maCTHD = maCTHD;
+        this.maHD = maHD;
+        this.maMay = maMay;
+        this.donGia = donGia;
+        this.soLuong = soLuong;
+        this.thanhTien = thanhTien;
+        this.thanhTien = donGia * soLuong;
 
     }
 
-    //Getter and Setter
-    public String getMaCTHD(){
+    // Getter and Setter
+    public String getMaCTHD() {
         return maCTHD;
     }
 
-    public String getMaHD(){
+    public String getMaHD() {
         return maHD;
     }
 
-    public String getMaSP(){
-        return maSP;
+    public String getMaMay() {
+        return maMay;
     }
 
-    public double getDonGia(){
+    public String getMaKH() {
+        return maKH;
+    }
+
+    public double getDonGia() {
         return donGia;
     }
 
-    public int getSoLuong(){
+    public int getSoLuong() {
         return soLuong;
     }
 
-    public double getThanhTien(){
+    public double getThanhTien() {
         return thanhTien;
     }
 
-    public void setMaHD(String maHD){
-        this.maHD =maHD;
+    public void setMaCTHD(String maCTHD) {
+        this.maCTHD = maCTHD;
     }
 
-    public void setMaSP(String maSP){
-        this.maSP =maSP;
+    public void setMaHD(String maHD) {
+        this.maHD = maHD;
     }
 
-    public void setDonGia(double donGia){
-        this.donGia =donGia;
+    public void setMaMay(String maMay) {
+        this.maMay = maMay;
     }
 
-    public void setSoLuong(int soLuong){
-        this.soLuong =soLuong;
+    public void setMaKH(String maKH) {
+        this.maKH = maKH;
     }
 
-    public void setThanhTien(double thanhTien){
-        this.thanhTien =thanhTien;
+    public void setDonGia(double donGia) {
+        this.donGia = donGia;
     }
 
-    //phương thức tính thành tiền
-    public void tinhThanhTien(){
-        if(donGia != 0 && soLuong != 0){
+    public void setSoLuong(int soLuong) {
+        this.soLuong = soLuong;
+    }
+
+    public void setThanhTien(double thanhTien) {
+        this.thanhTien = thanhTien;
+    }
+
+    // phương thức tính thành tiền
+    public void tinhThanhTien() {
+        if (donGia != 0 && soLuong != 0) {
             thanhTien = donGia * soLuong;
         }
     }
@@ -76,10 +91,7 @@ public class ChiTietHoaDon {
     @Override
     public String toString() {
         return "ChiTietHoaDon[Ma CTHD: " + maCTHD + " Ma HD: " + maHD +
-        " Ma SP: " + maSP + " Don Gia: " + donGia +
-         " So Luong: " + soLuong + " Thanh Tien: " + thanhTien + "]";
+                " Ma SP: " + maMay + ",Ma KH: " + maKH + " Don Gia: " + donGia +
+                " So Luong: " + soLuong + " Thanh Tien: " + thanhTien + "]";
     }
 }
-
-
-

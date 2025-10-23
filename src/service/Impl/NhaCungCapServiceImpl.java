@@ -138,10 +138,12 @@ public class NhaCungCapServiceImpl implements NhaCungCapService {
                 if (parts.length >= 5) {
                     NhaCungCap ncc = new NhaCungCap(
                             parts[0], // ma
-                            parts[1], // ten
-                            parts[2], // dia chi
-                            parts[3], // sdt
-                            parts[4] // email
+                            parts[1], // hang
+                            parts[3], // ten
+                            parts[4], // nguoi dai dien
+                            parts[5], // dia chi
+                            parts[6], // sdt
+                            parts[7] // email
                     );
                     danhSachNCC.add(ncc);
 

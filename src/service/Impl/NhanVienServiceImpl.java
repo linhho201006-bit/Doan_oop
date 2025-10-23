@@ -1,6 +1,7 @@
 package service.Impl;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,16 +15,15 @@ import service.NhanVienService;
 
 public class NhanVienServiceImpl implements NhanVienService {
     private static final String FILE_PATH = "src/resources/NhanVien.txt";
-    private List<NhanVien> danhSach;
+    private List<NhanVien> danhSachnhanvien;
     private int nextMa;
 
     public NhanVienServiceImpl() {
-        danhSach = new ArrayList<>();
+        danhSachnhanvien = new ArrayList<>();
         nextMa = 1;
         loadData();
     }
 
-    // Tạo mã tự động NV001, NV002, ...
     private String generateMa() {
         return String.format("NV%03d", nextMa++);
     }
@@ -31,8 +31,8 @@ public class NhanVienServiceImpl implements NhanVienService {
     @Override
     public boolean themNhanVien(NhanVien nhanVien) {
         try {
-            nhanVien.setMaNhanVien(generateMa());
-            danhSach.add(nhanVien);
+            nhanVien.setMaNV(generateMa());
+            danhSachnhanvien.add(nhanVien);
             saveData();
             return true;
         } catch (Exception e) {
@@ -43,13 +43,13 @@ public class NhanVienServiceImpl implements NhanVienService {
 
     @Override
     public List<NhanVien> layTatCaNhanVien() {
-        return new ArrayList<>(danhSach);
+        return new ArrayList<>(danhSachnhanvien);
     }
 
     @Override
-    public NhanVien timKiemNhanVienTheoMa(String maNhanVien) {
-        for (NhanVien nv : danhSach) {
-            if (nv.getMaNhanVien().equalsIgnoreCase(maNhanVien)) {
+    public NhanVien timNhanVienTheoMa(String maNV) {
+        for (NhanVien nv : danhSachnhanvien) {
+            if (nv.getMaNV().equals(maNV)) {
                 return nv;
             }
         }
@@ -57,11 +57,47 @@ public class NhanVienServiceImpl implements NhanVienService {
     }
 
     @Override
-    public List<NhanVien> timKiemNhanVienTheoTen(String tenNhanVien) {
+    public List<NhanVien> timNhanVienTheoHoTen(String hoTen) {
         List<NhanVien> ketQua = new ArrayList<>();
-        String tenLower = tenNhanVien.toLowerCase();
-        for (NhanVien nv : danhSach) {
-            if (nv.getTenNhanVien().toLowerCase().contains(tenLower)) {
+        for (NhanVien nv : danhSachnhanvien) {
+            if (nv.getHoTen().toLowerCase().contains(hoTen.toLowerCase())) {
+                ketQua.add(nv);
+            }
+        }
+        return ketQua;
+    }
+
+    @Override
+    public List<NhanVien> timNhanVienTheoCMND(String CMND) {
+        List<NhanVien> ketQua = new ArrayList<>();
+        for (NhanVien nv : danhSachnhanvien) {
+            if (nv.getCMND().toLowerCase().contains(CMND.toLowerCase())) {
+                ketQua.add(nv);
+            }
+        }
+        return ketQua;
+    }
+
+    @Override
+    public List<NhanVien> timNhanVienTheoSDT(String SDT) {
+        List<NhanVien> ketQua = new ArrayList<>();
+        for (NhanVien nv : danhSachnhanvien) {
+            if (nv.getSDT().toLowerCase().contains(SDT.toLowerCase())) {
+                ketQua.add(nv);
+            }
+        }
+        return ketQua;
+    }
+
+    @Override
+    public List<NhanVien> timKiemNhanVien(String tuKhoa) {
+        List<NhanVien> ketQua = new ArrayList<>();
+        String tuKhoaLower = tuKhoa.toLowerCase();
+        for (NhanVien nv : danhSachnhanvien) {
+            if (nv.getHoTen().toLowerCase().contains(tuKhoaLower) ||
+                    nv.getDiaChi().toLowerCase().contains(tuKhoaLower) ||
+                    nv.getSDT().contains(tuKhoa) ||
+                    nv.getEmail().toLowerCase().contains(tuKhoaLower)) {
                 ketQua.add(nv);
             }
         }
@@ -70,9 +106,9 @@ public class NhanVienServiceImpl implements NhanVienService {
 
     @Override
     public boolean capNhatNhanVien(NhanVien nhanVien) {
-        for (int i = 0; i < danhSach.size(); i++) {
-            if (danhSach.get(i).getMaNhanVien().equalsIgnoreCase(nhanVien.getMaNhanVien())) {
-                danhSach.set(i, nhanVien);
+        for (int i = 0; i < danhSachnhanvien.size(); i++) {
+            if (danhSachnhanvien.get(i).getMaNV().equals(nhanVien.getMaNV())) {
+                danhSachnhanvien.set(i, nhanVien);
                 saveData();
                 return true;
             }
@@ -81,29 +117,27 @@ public class NhanVienServiceImpl implements NhanVienService {
     }
 
     @Override
-    public boolean xoaNhanVien(String maNhanVien) {
-        boolean removed = danhSach.removeIf(nv -> nv.getMaNhanVien().equalsIgnoreCase(maNhanVien));
+    public boolean xoaNhanVien(String maNV) {
+        boolean removed = danhSachnhanvien.removeIf(nv -> nv.getMaNV().equals(maNV));
         if (removed) {
             saveData();
         }
         return removed;
     }
 
-    // ========================== Xử lý file ==========================
-
     private void saveData() {
         try (PrintWriter writer = new PrintWriter(new FileWriter(FILE_PATH))) {
-            for (NhanVien nv : danhSach) {
-                writer.println(
-                        nv.getMaNhanVien() + "|" +
-                                nv.getTenNhanVien() + "|" +
-                                (nv.getNgaySinh() != null ? nv.getNgaySinh().toString() : "null") + "|" +
-                                nv.getGioiTinh() + "|" +
-                                nv.getDiaChi() + "|" +
-                                nv.getCMND() + "|" +
-                                nv.getSoDienThoai() + "|" +
-                                nv.getEmail() + "|" +
-                                (nv.getLuong() != null ? nv.getLuong() : "null"));
+            for (NhanVien nv : danhSachnhanvien) {
+                writer.println(nv.getMaNV() + "|" +
+                        nv.getHoTen() + "|" +
+                        (nv.getNgaySinh() != null ? nv.getNgaySinh().toString() : "null") + "|" +
+                        nv.getGioiTinh() + "|" +
+                        nv.getDiaChi() + "|" +
+                        nv.getVaiTro() + "|" +
+                        nv.getCMND() + "|" +
+                        nv.getSDT() + "|" +
+                        nv.getEmail() + "|" +
+                        (nv.getLuong() != null ? nv.getLuong() : "null"));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -117,15 +151,20 @@ public class NhanVienServiceImpl implements NhanVienService {
                 String[] parts = line.split("\\|");
                 if (parts.length == 9) {
                     Date ngaySinh = parts[2].equals("null") ? null : Date.valueOf(parts[2]);
-                    Double luong = parts[8].equals("null") ? null : Double.parseDouble(parts[8]);
-
+                    Double luong = parts[9].equals("null") ? null : Double.parseDouble(parts[9]);
                     NhanVien nv = new NhanVien(
-                            parts[0], parts[1], ngaySinh, parts[3],
-                            parts[4], parts[5], parts[6], parts[7], luong);
+                            parts[0],
+                            parts[1],
+                            ngaySinh,
+                            parts[3],
+                            parts[4],
+                            parts[5],
+                            parts[6],
+                            parts[7],
+                            parts[8],
+                            luong);
+                    danhSachnhanvien.add(nv);
 
-                    danhSach.add(nv);
-
-                    // Cập nhật mã tiếp theo
                     String ma = parts[0];
                     if (ma.startsWith("NV")) {
                         try {
@@ -134,13 +173,17 @@ public class NhanVienServiceImpl implements NhanVienService {
                                 nextMa = so + 1;
                             }
                         } catch (NumberFormatException e) {
-                            // bỏ qua nếu mã lỗi
+                            // Ignore
                         }
                     }
                 }
             }
         } catch (IOException e) {
-            // Nếu file chưa tồn tại, không sao
+            try {
+                new File(FILE_PATH).createNewFile();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 }

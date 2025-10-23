@@ -2,9 +2,10 @@ package controller;
 
 import java.util.List;
 import java.util.Scanner;
-
 import model.PhieuNhapHang;
+import service.NhaCungCapService;
 import service.PhieuNhapHangService;
+import service.Impl.NhaCungCapServiceImpl;
 import service.Impl.PhieuNhapHangServiceImpl;
 
 public class PhieuNhapHangController {
@@ -12,7 +13,11 @@ public class PhieuNhapHangController {
     private Scanner scanner;
 
     public PhieuNhapHangController() {
-        phieuNhapHangService = new PhieuNhapHangServiceImpl();
+        // ✅ Khởi tạo NhaCungCapService trước
+        NhaCungCapService nhaCungCapService = new NhaCungCapServiceImpl();
+
+        // ✅ Truyền vào PhieuNhapHangServiceImpl
+        phieuNhapHangService = new PhieuNhapHangServiceImpl(nhaCungCapService);
         scanner = new Scanner(System.in);
     }
 
@@ -168,7 +173,7 @@ public class PhieuNhapHangController {
                 String tu = scanner.nextLine();
                 System.out.print("Đến ngày (yyyy-MM-dd): ");
                 String den = scanner.nextLine();
-                ketQua = phieuNhapHangService.layPhieuNhapHangTheoKhoangThoiGian(tu, den);
+                ketQua = phieuNhapHangService.timPhieuNhapHangTheoKhoangThoiGian(tu, den);
             }
             case 8 -> {
                 System.out.print("Nhập từ khóa tổng hợp: ");

@@ -1,6 +1,7 @@
 package service;
 
 import java.util.List;
+
 import model.NhanVien;
 
 public interface NhanVienService {
@@ -11,15 +12,25 @@ public interface NhanVienService {
     // Lấy tất cả nhân viên
     List<NhanVien> layTatCaNhanVien();
 
-    // Tìm kiếm nhân viên theo mã
-    NhanVien timKiemNhanVienTheoMa(String maNhanVien);
+    // Tìm nhân viên theo mã
+    NhanVien timNhanVienTheoMa(String maKH);
 
-    // Tìm kiếm nhân viên theo tên
-    List<NhanVien> timKiemNhanVienTheoTen(String tenNhanVien);
+    // Tìm nhân viên theo họ tên
+    List<NhanVien> timNhanVienTheoHoTen(String hoTen);
+
+    // Tìm nhân viên theo CMND
+    List<NhanVien> timNhanVienTheoCMND(String CMND);
+
+    // Tìm nhân viên theo SĐT
+    List<NhanVien> timNhanVienTheoSDT(String SDT);
+
+    // Tìm kiếm tổng hợp
+    List<NhanVien> timKiemNhanVien(String tuKhoa);
 
     // Cập nhật nhân viên
     boolean capNhatNhanVien(NhanVien nhanVien);
 
     // Xóa nhân viên
-    boolean xoaNhanVien(String maNhanVien);
+    boolean xoaNhanVien(String maNV);
+
 }

@@ -6,15 +6,24 @@ public class PC extends MayTinh {
     private String loaiCPU;
     private int ram;
 
-    public PC() {}
+    public PC() {
+    }
 
-    public PC(String maMay, String tenMay, double gia, String hangSX, String loaiCPU, int ram) {
-        super(maMay, tenMay, gia, hangSX);
+    public PC(String maMay, String tenMay, String hangSX, double gia, int ram, String loaiCPU) {
+        super(maMay, tenMay, hangSX, gia);
         this.loaiCPU = loaiCPU;
         this.ram = ram;
     }
 
-    //Getters and Setters
+    // Getters and Setters
+    public String getMaPC() {
+        return getMaMay();
+    }
+
+    public void setMaPC(String maPC) {
+        setMaMay(maPC);
+    }
+
     public String getLoaiCPU() {
         return loaiCPU;
     }

@@ -1,20 +1,23 @@
 package model;
 
 public class BaoHanh {
-    private String maBH; // Mã phiếu bảo hành
-    private String maHD; // Mã hóa đơn liên quan
-    private String maMay; // Mã máy được bảo hành
-    private String ngayBatDau; // Ngày bắt đầu bảo hành (dd/MM/yyyy)
-    private String ngayKetThuc; // Ngày hết hạn bảo hành (dd/MM/yyyy)
+    private String maBH;
+    private String maHD;
+    private String maMay;
+    private String maKH;
+    private String ngayBatDau;
+    private String ngayKetThuc;
     private String tinhTrang; // Tình trạng (Còn hiệu lực / Hết hạn / Đang xử lý)
 
     public BaoHanh() {
     }
 
-    public BaoHanh(String maBH, String maHD, String maMay, String ngayBatDau, String ngayKetThuc, String tinhTrang) {
+    public BaoHanh(String maBH, String maHD, String maMay, String maKH, String ngayBatDau, String ngayKetThuc,
+            String tinhTrang) {
         this.maBH = maBH;
         this.maHD = maHD;
         this.maMay = maMay;
+        this.maKH = maKH;
         this.ngayBatDau = ngayBatDau;
         this.ngayKetThuc = ngayKetThuc;
         this.tinhTrang = tinhTrang;
@@ -43,6 +46,14 @@ public class BaoHanh {
 
     public void setMaMay(String maMay) {
         this.maMay = maMay;
+    }
+
+    public String getMaKH() {
+        return maKH;
+    }
+
+    public void setMaKH(String maKH) {
+        this.maKH = maKH;
     }
 
     public String getNgayBatDau() {

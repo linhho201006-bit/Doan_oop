@@ -69,9 +69,9 @@ public class MayTinhController {
         System.out.print("Nhập loại CPU: ");
         String loaiCPU = scanner.nextLine();
 
-        PC pc = new PC(tenMay, hangSX, gia, ram, loaiCPU, "");
+        PC pc = new PC("", tenMay, hangSX, gia, ram, loaiCPU);
         if (mayTinhService.themPC(pc)) {
-            System.out.println("Thêm PC thành công! Mã: " + pc.getMaPC());
+            System.out.println("Thêm PC thành công! Mã: " + pc.getMaMay());
         } else {
             System.out.println("Thêm PC thất bại!");
         }
@@ -87,15 +87,15 @@ public class MayTinhController {
         System.out.print("Nhập giá: ");
         double gia = scanner.nextDouble();
         scanner.nextLine();
-        System.out.print("Nhập kích thước màn hình (inch): ");
-        double kichThuoc = scanner.nextDouble();
-        scanner.nextLine();
         System.out.print("Nhập loại pin: ");
-        String loaiPin = scanner.nextLine();
+        double trongLuong = scanner.nextDouble();
+        System.out.print("Nhập kích thước màn hình (inch): ");
+        double kichThuocManHinh = scanner.nextDouble();
+        scanner.nextLine();
 
-        LapTop laptop = new LapTop(tenMay, hangSX, gia, kichThuoc, loaiPin, "");
+        LapTop laptop = new LapTop("", tenMay, hangSX, gia, trongLuong, kichThuocManHinh);
         if (mayTinhService.themLapTop(laptop)) {
-            System.out.println("Thêm Laptop thành công! Mã: " + laptop.getMaLapTop());
+            System.out.println("Thêm Laptop thành công! Mã: " + laptop.getMaMay());
         } else {
             System.out.println("Thêm Laptop thất bại!");
         }
@@ -119,7 +119,7 @@ public class MayTinhController {
                     "Mã", "Tên máy", "Hãng SX", "Giá", "RAM", "CPU");
             for (PC pc : dsPC) {
                 System.out.printf("%-10s %-20s %-15s %-10.0f %-10d %-10s%n",
-                        pc.getMaPC(), pc.getTenMay(), pc.getHangSX(),
+                        pc.getMaMay(), pc.getTenMay(), pc.getHangSX(),
                         pc.getGia(), pc.getRam(), pc.getLoaiCPU());
             }
         }
@@ -127,11 +127,11 @@ public class MayTinhController {
         if (!dsLap.isEmpty()) {
             System.out.println("\n--- DANH SÁCH LAPTOP ---");
             System.out.printf("%-10s %-20s %-15s %-10s %-15s %-15s%n",
-                    "Mã", "Tên máy", "Hãng SX", "Giá", "Màn hình", "Loại pin");
+                    "Mã", "Tên máy", "Hãng SX", "Giá", "Trọng lượng", "Màn hình");
             for (LapTop lt : dsLap) {
-                System.out.printf("%-10s %-20s %-15s %-10.0f %-15.1f %-15s%n",
-                        lt.getMaLapTop(), lt.getTenMay(), lt.getHangSX(),
-                        lt.getGia(), lt.getKichThuocManHinh(), lt.getLoaiPin());
+                System.out.printf("%-10s %-20s %-15s %-10.0f %-15.1f %-15s.1f",
+                        lt.getMaMay(), lt.getTenMay(), lt.getHangSX(),
+                        lt.getGia(), lt.getTrongLuong(), lt.getKichThuocManHinh());
             }
         }
     }
@@ -144,8 +144,8 @@ public class MayTinhController {
         System.out.println("3. Theo hãng sản xuất");
         System.out.println("4. PC theo RAM");
         System.out.println("5. PC theo loại CPU");
-        System.out.println("6. Laptop theo kích thước màn hình");
-        System.out.println("7. Laptop theo loại pin");
+        System.out.println("6. Laptop theo trọng lượng");
+        System.out.println("7. Laptop theo kích thước màn hình");
         System.out.println("8. Tìm kiếm tổng hợp");
         System.out.print("Chọn: ");
         int chon = scanner.nextInt();
@@ -186,16 +186,16 @@ public class MayTinhController {
                 return;
             }
             case 6 -> {
+                System.out.print("Nhập trọng lượng: ");
+                Double trongLuong = scanner.nextDouble();
+                hienThiLapTop(mayTinhService.timKiemLapTopTheoTrongLuong(trongLuong));
+                return;
+            }
+            case 7 -> {
                 System.out.print("Nhập kích thước màn hình: ");
                 double kichThuoc = scanner.nextDouble();
                 scanner.nextLine();
                 hienThiLapTop(mayTinhService.timKiemLapTopTheoKichThuocManHinh(kichThuoc));
-                return;
-            }
-            case 7 -> {
-                System.out.print("Nhập loại pin: ");
-                String pin = scanner.nextLine();
-                hienThiLapTop(mayTinhService.timKiemLapTopTheoLoaiPin(pin));
                 return;
             }
             case 8 -> {
@@ -217,7 +217,7 @@ public class MayTinhController {
 
         System.out.printf("%-10s %-20s %-15s %-10s%n", "Mã", "Tên máy", "Hãng SX", "Giá");
         for (MayTinh m : ds) {
-            String ma = (m instanceof PC) ? ((PC) m).getMaPC() : ((LapTop) m).getMaLapTop();
+            String ma = (m instanceof PC) ? ((PC) m).getMaMay() : ((LapTop) m).getMaMay();
             System.out.printf("%-10s %-20s %-15s %-10.0f%n", ma, m.getTenMay(), m.getHangSX(), m.getGia());
         }
     }
@@ -231,7 +231,7 @@ public class MayTinhController {
                 "Mã", "Tên", "Hãng SX", "Giá", "RAM", "CPU");
         for (PC pc : ds) {
             System.out.printf("%-10s %-20s %-15s %-10.0f %-10d %-10s%n",
-                    pc.getMaPC(), pc.getTenMay(), pc.getHangSX(),
+                    pc.getMaMay(), pc.getTenMay(), pc.getHangSX(),
                     pc.getGia(), pc.getRam(), pc.getLoaiCPU());
         }
     }
@@ -241,12 +241,12 @@ public class MayTinhController {
             System.out.println("Không có Laptop nào!");
             return;
         }
-        System.out.printf("%-10s %-20s %-15s %-10s %-15s %-15s%n",
-                "Mã", "Tên", "Hãng SX", "Giá", "Màn hình", "Loại pin");
+        System.out.printf("%-10s %-20s %-15s %-10s %-15s %-15s",
+                "Mã", "Tên", "Hãng SX", "Giá", "Trọng lượng", "Màn hình");
         for (LapTop lt : ds) {
-            System.out.printf("%-10s %-20s %-15s %-10.0f %-15.1f %-15s%n",
-                    lt.getMaLapTop(), lt.getTenMay(), lt.getHangSX(),
-                    lt.getGia(), lt.getKichThuocManHinh(), lt.getLoaiPin());
+            System.out.printf("%-10s %-20s %-15s %-10.0f %-15.1f %-15s.1f",
+                    lt.getMaMay(), lt.getTenMay(), lt.getHangSX(),
+                    lt.getGia(), lt.getTrongLuong(), lt.getKichThuocManHinh());
         }
     }
 
@@ -331,15 +331,15 @@ public class MayTinhController {
         if (!giaStr.isEmpty())
             lt.setGia(Double.parseDouble(giaStr));
 
+        System.out.print("Trọng lượng [" + lt.getTrongLuong() + "]: ");
+        String trongLuong = scanner.nextLine();
+        if (!trongLuong.isEmpty())
+            lt.setTrongLuong(Double.parseDouble(trongLuong));
+
         System.out.print("Màn hình [" + lt.getKichThuocManHinh() + "]: ");
         String manStr = scanner.nextLine();
         if (!manStr.isEmpty())
             lt.setKichThuocManHinh(Double.parseDouble(manStr));
-
-        System.out.print("Loại pin [" + lt.getLoaiPin() + "]: ");
-        String pin = scanner.nextLine();
-        if (!pin.isEmpty())
-            lt.setLoaiPin(pin);
 
         if (mayTinhService.capNhatLapTop(lt))
             System.out.println("Cập nhật Laptop thành công!");

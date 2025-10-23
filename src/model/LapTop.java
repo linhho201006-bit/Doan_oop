@@ -6,15 +6,24 @@ public class LapTop extends MayTinh {
     private Double trongLuong;
     private Double kichThuocManHinh;
 
-    public LapTop() {}
+    public LapTop() {
+    }
 
-    public LapTop(String maMay, String tenMay, Double gia, String hangSX, Double trongLuong, Double kichThuocManHinh) {
-        super(maMay, tenMay, gia, hangSX);
+    public LapTop(String maMay, String tenMay, String hangSX, Double gia, Double trongLuong, Double kichThuocManHinh) {
+        super(maMay, tenMay, hangSX, gia);
         this.trongLuong = trongLuong;
         this.kichThuocManHinh = kichThuocManHinh;
     }
 
-    //Getters and Setters
+    // Getters and Setters
+    public String getMaLapTop() {
+        return getMaMay();
+    }
+
+    public void setMaLapTop(String maLapTop) {
+        setMaMay(maLapTop);
+    }
+
     public Double getTrongLuong() {
         return trongLuong;
     }
@@ -36,4 +45,3 @@ public class LapTop extends MayTinh {
         return "LapTop [Trong luong: " + trongLuong + " Kich Thuoc Man Hinh: " + kichThuocManHinh + "]";
     }
 }
-

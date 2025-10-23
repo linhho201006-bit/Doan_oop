@@ -10,14 +10,14 @@ public interface PhieuNhapHangService {
     // Lấy tất cả phiếu nhập hàng
     List<PhieuNhapHang> layTatCaPhieuNhapHang();
 
-    // Lấy phiếu nhập hàng theo mã
-    PhieuNhapHang timPhieuNhapHangTheoMa(String maPhieuNhapHang);
+    // Tìm phiếu nhập hàng theo mã
+    PhieuNhapHang timPhieuNhapHangTheoMa(String maPNH);
 
-    // Lấy danh sách phiếu nhập hàng theo nhà cung cấp
-    List<PhieuNhapHang> layPhieuNhapHangTheoNhaCungCap(String maNhaCungCap);
+    // Tìm danh sách phiếu nhập hàng theo nhà cung cấp
+    List<PhieuNhapHang> timPhieuNhapHangTheoNhaCungCap(String maNCC);
 
-    // Lấy danh sách phiếu nhập hàng theo khoảng thời gian
-    List<PhieuNhapHang> layPhieuNhapHangTheoKhoangThoiGian(String tuNgay, String denNgay);
+    // Tìm danh sách phiếu nhập hàng theo khoảng thời gian
+    List<PhieuNhapHang> timPhieuNhapHangTheoKhoangThoiGian(String tuNgay, String denNgay);
 
     // Tìm kiếm tổng hợp
     List<PhieuNhapHang> timKiemPhieuNhapHang(String tuKhoa);
@@ -35,22 +35,22 @@ public interface PhieuNhapHangService {
     List<PhieuNhapHang> timKiemPhieuNhapHangTheoPhuongThucThanhToan(String phuongThucThanhToan);
 
     // Tìm kiếm phiếu nhập hàng theo nhà cung cấp
-    List<PhieuNhapHang> timKiemPhieuNhapHangTheoNhaCungCap(String maNhaCungCap);
+    List<PhieuNhapHang> timKiemPhieuNhapHangTheoNhaCungCap(String maNCC);
 
     // Cập nhật phiếu nhập hàng
     boolean capNhatPhieuNhapHang(PhieuNhapHang phieuNhapHang);
 
     // Xóa phiếu nhập hàng
-    boolean xoaPhieuNhapHang(String maPhieuNhapHang);
+    boolean xoaPhieuNhapHang(String maPNH);
 
     // Hủy phiếu nhập hàng
-    boolean huyPhieuNhapHang(String maPhieuNhapHang);
+    boolean huyPhieuNhapHang(String maPNH);
 
     // Thanh toán phiếu nhập hàng
-    boolean thanhToanPhieuNhapHang(String maPhieuNhapHang, String phuongThucThanhToan);
+    boolean thanhToanPhieuNhapHang(String maPNH, String phuongThucThanhToan);
 
     // Kiểm tra ràng buộc :mã nhà cung cấp phải tồn tại
-    boolean kiemTraRangBuocMaNhaCungCap(String maNhaCungCap);
+    boolean kiemTraRangBuocMaNhaCungCap(String maNCC);
 
     // Tính tổng tiền của phiếu nhập hàng
     Double tinhTongTienPhieuNhapHang();

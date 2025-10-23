@@ -1,22 +1,34 @@
 package model;
 
+import java.sql.Date;
+
 public class NhanVien {
     private String maNV;
     private String hoTen;
-    private String vaiTro; // vai trò (admin,nhanvien,quanly,...)
-    private Double luong;
+    private Date ngaySinh;
+    private String gioiTinh;
     private String diaChi;
+    private String vaiTro; // vai trò (admin,nhanvien,quanly,...)
+    private String Email;
+    private String CMND;
     private String SDT;
+    private Double luong;
 
     public NhanVien() {
     };
 
-    public NhanVien(String maNV, String hoTen, String vaiTro, Double luong, String diaChi, String SDT) {
+    public NhanVien(String maNV, String hoTen, Date ngaySinh, String gioiTinh, String diaChi, String vaiTro,
+            String CMND, String SDT, String Email, Double luong) {
         this.maNV = maNV;
         this.hoTen = hoTen;
-        this.luong = luong;
+        this.ngaySinh = ngaySinh;
+        this.gioiTinh = gioiTinh;
         this.diaChi = diaChi;
+        this.vaiTro = vaiTro;
+        this.CMND = CMND;
         this.SDT = SDT;
+        this.Email = Email;
+        this.luong = luong;
     }
 
     // Getter and Setter
@@ -36,12 +48,60 @@ public class NhanVien {
         this.hoTen = hoTen;
     }
 
+    public Date getNgaySinh() {
+        return ngaySinh;
+    }
+
+    public void setNgaySinh(Date ngaySinh) {
+        this.ngaySinh = ngaySinh;
+    }
+
+    public String getGioiTinh() {
+        return gioiTinh;
+    }
+
+    public void setGioiTinh(String gioiTinh) {
+        this.gioiTinh = gioiTinh;
+    }
+
+    public String getDiaChi() {
+        return diaChi;
+    }
+
+    public void setDiaChi(String diaChi) {
+        this.diaChi = diaChi;
+    }
+
     public String getVaiTro() {
         return vaiTro;
     }
 
     public void setVaiTro(String vaiTro) {
         this.vaiTro = vaiTro;
+    }
+
+    public String getEmail() {
+        return Email;
+    }
+
+    public void setEmail(String Email) {
+        this.Email = Email;
+    }
+
+    public String getCMND() {
+        return CMND;
+    }
+
+    public void setCMND(String CMND) {
+        this.CMND = CMND;
+    }
+
+    public String getSDT() {
+        return SDT;
+    }
+
+    public void setSDT(String SDT) {
+        this.SDT = SDT;
     }
 
     public Double getLuong() {
@@ -52,25 +112,10 @@ public class NhanVien {
         this.luong = luong;
     }
 
-    public String getDiachi() {
-        return diaChi;
-    }
-
-    public void setDiachi(String diaChi) {
-        this.diaChi = diaChi;
-    }
-
-    public String getSdt() {
-        return SDT;
-    }
-
-    public void setSdt(String SDT) {
-        this.SDT = SDT;
-    }
-
     @Override
     public String toString() {
-        return "NhanVien [maNV:" + maNV + ", hoTen:" + hoTen + ", vaiTro:" + vaiTro +
-                ", luong:" + luong + ", diaChi:" + diaChi + ", SDT:" + SDT + "]";
+        return "NhanVien [maNV:" + maNV + ", hoTen:" + hoTen + ",ngaySinh:" + ngaySinh + ",gioiTinh:" + gioiTinh
+                + ", diaChi:" + diaChi + ", vaiTro:" + vaiTro +
+                ",Email:" + Email + "CMND:" + CMND + ", SDT:" + SDT + ", luong:" + luong + "]";
     }
 }

@@ -11,65 +11,31 @@ public class BaoHanhServiceImpl implements BaoHanhService {
 
     private final String FILE_PATH = "src/resources/BaoHanh.txt";
     private List<BaoHanh> danhSachBaoHanh = new ArrayList<>();
+    private int nextMaBH = 1;
 
     public BaoHanhServiceImpl() {
-        docDuLieuTuFile();
+        loadData();
     }
 
-    // =====================================================
-    // 1️⃣ Đọc & ghi file dữ liệu
-    // =====================================================
-    private void luuDuLieuRaFile() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PATH))) {
-            for (BaoHanh b : danhSachBaoHanh) {
-                bw.write(String.join("|",
-                        b.getMaBH(),
-                        b.getMaSP(),
-                        b.getMaHD(),
-                        b.getTenKH(),
-                        b.getNgayBatDau(),
-                        b.getNgayKetThuc(),
-                        b.getTrangThai()));
-                bw.newLine();
-            }
-        } catch (IOException e) {
-            System.out.println("Lỗi khi ghi file BaoHanh: " + e.getMessage());
-        }
+    // ✅ Hàm sinh mã tự động
+    private String taoMaTuDong() {
+        return String.format("BH%03d", nextMaBH++);
     }
 
-    private void docDuLieuTuFile() {
-        danhSachBaoHanh.clear();
-        try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split("\\|");
-                if (parts.length >= 7) {
-                    BaoHanh b = new BaoHanh(
-                            parts[0], // maBH
-                            parts[1], // maSP
-                            parts[2], // maHD
-                            parts[3], // tenKH
-                            parts[4], // ngayBatDau
-                            parts[5], // ngayKetThuc
-                            parts[6] // trangThai
-                    );
-                    danhSachBaoHanh.add(b);
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("File BaoHanh chưa tồn tại hoặc lỗi khi đọc file.");
-        }
-    }
-
-    // =====================================================
-    // 2️⃣ CRUD cơ bản
-    // =====================================================
     @Override
     public boolean taoBaoHanh(BaoHanh baoHanh) {
-        if (baoHanh == null || timBaoHanhTheoMa(baoHanh.getMaBH()) != null)
+        if (baoHanh == null)
             return false;
+
+        // ✅ Sinh mã tự động nếu chưa có
+        if (baoHanh.getMaBH() == null || baoHanh.getMaBH().trim().isEmpty()) {
+            baoHanh.setMaBH(taoMaTuDong());
+        } else if (timBaoHanhTheoMaBH(baoHanh.getMaBH()) != null) {
+            return false;
+        }
+
         danhSachBaoHanh.add(baoHanh);
-        luuDuLieuRaFile();
+        saveData();
         return true;
     }
 
@@ -79,7 +45,7 @@ public class BaoHanhServiceImpl implements BaoHanhService {
     }
 
     @Override
-    public BaoHanh timBaoHanhTheoMa(String maBH) {
+    public BaoHanh timBaoHanhTheoMaBH(String maBH) {
         return danhSachBaoHanh.stream()
                 .filter(b -> b.getMaBH().equalsIgnoreCase(maBH))
                 .findFirst()
@@ -87,40 +53,17 @@ public class BaoHanhServiceImpl implements BaoHanhService {
     }
 
     @Override
-    public BaoHanh timBaoHanhTheoMaSanPham(String maSP) {
+    public BaoHanh timBaoHanhTheoMaMay(String maMay) {
         return danhSachBaoHanh.stream()
-                .filter(b -> b.getMaSP().equalsIgnoreCase(maSP))
+                .filter(b -> b.getMaMay().equalsIgnoreCase(maMay))
                 .findFirst()
                 .orElse(null);
     }
 
     @Override
-    public boolean capNhatBaoHanh(BaoHanh baoHanh) {
-        for (int i = 0; i < danhSachBaoHanh.size(); i++) {
-            if (danhSachBaoHanh.get(i).getMaBH().equalsIgnoreCase(baoHanh.getMaBH())) {
-                danhSachBaoHanh.set(i, baoHanh);
-                luuDuLieuRaFile();
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean xoaBaoHanh(String maBH) {
-        boolean removed = danhSachBaoHanh.removeIf(b -> b.getMaBH().equalsIgnoreCase(maBH));
-        if (removed)
-            luuDuLieuRaFile();
-        return removed;
-    }
-
-    // =====================================================
-    // 3️⃣ Tìm kiếm
-    // =====================================================
-    @Override
     public List<BaoHanh> timKiemBaoHanhTheoKhachHang(String tenKH) {
         return danhSachBaoHanh.stream()
-                .filter(b -> b.getTenKH().toLowerCase().contains(tenKH.toLowerCase()))
+                .filter(b -> b.getMaKH().toLowerCase().contains(tenKH.toLowerCase()))
                 .collect(Collectors.toList());
     }
 
@@ -132,21 +75,18 @@ public class BaoHanhServiceImpl implements BaoHanhService {
     }
 
     @Override
-    public List<BaoHanh> timKiemBaoHanhTheoTrangThai(String trangThai) {
+    public List<BaoHanh> timKiemBaoHanhTheoTinhTrang(String tinhTrang) {
         return danhSachBaoHanh.stream()
-                .filter(b -> b.getTrangThai().equalsIgnoreCase(trangThai))
+                .filter(b -> b.getTinhTrang().equalsIgnoreCase(tinhTrang))
                 .collect(Collectors.toList());
     }
 
-    // =====================================================
-    // 4️⃣ Cập nhật trạng thái & ràng buộc
-    // =====================================================
     @Override
-    public boolean capNhatTrangThaiBaoHanh(String maBH, String trangThai) {
-        for (BaoHanh b : danhSachBaoHanh) {
-            if (b.getMaBH().equalsIgnoreCase(maBH)) {
-                b.setTrangThai(trangThai);
-                luuDuLieuRaFile();
+    public boolean capNhatBaoHanh(BaoHanh baoHanh) {
+        for (int i = 0; i < danhSachBaoHanh.size(); i++) {
+            if (danhSachBaoHanh.get(i).getMaBH().equalsIgnoreCase(baoHanh.getMaBH())) {
+                danhSachBaoHanh.set(i, baoHanh);
+                saveData();
                 return true;
             }
         }
@@ -154,9 +94,29 @@ public class BaoHanhServiceImpl implements BaoHanhService {
     }
 
     @Override
-    public boolean kiemTraRangBuocMaSanPham(String maSP) {
+    public boolean xoaBaoHanh(String maBH) {
+        boolean removed = danhSachBaoHanh.removeIf(b -> b.getMaBH().equalsIgnoreCase(maBH));
+        if (removed)
+            saveData();
+        return removed;
+    }
+
+    @Override
+    public boolean capNhatTrangThaiBaoHanh(String maBH, String tinhTrang) {
+        for (BaoHanh b : danhSachBaoHanh) {
+            if (b.getMaBH().equalsIgnoreCase(maBH)) {
+                b.setTinhTrang(tinhTrang);
+                saveData();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean kiemTraRangBuocMaSanPham(String maMay) {
         return danhSachBaoHanh.stream()
-                .anyMatch(b -> b.getMaSP().equalsIgnoreCase(maSP));
+                .anyMatch(b -> b.getMaMay().equalsIgnoreCase(maMay));
     }
 
     @Override
@@ -165,18 +125,51 @@ public class BaoHanhServiceImpl implements BaoHanhService {
                 .anyMatch(b -> b.getMaHD().equalsIgnoreCase(maHD));
     }
 
-    // =====================================================
-    // 5️⃣ Tính toán & thống kê
-    // =====================================================
     @Override
     public int tinhTongSoBaoHanh() {
         return danhSachBaoHanh.size();
     }
 
     @Override
-    public int thongKeSoLuongBaoHanhTheoTrangThai(String trangThai) {
+    public int thongKeSoLuongBaoHanhTheoTrangThai(String tinhTrang) {
         return (int) danhSachBaoHanh.stream()
-                .filter(b -> b.getTrangThai().equalsIgnoreCase(trangThai))
+                .filter(b -> b.getTinhTrang().equalsIgnoreCase(tinhTrang))
                 .count();
+    }
+
+    private void saveData() {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PATH))) {
+            for (BaoHanh b : danhSachBaoHanh) {
+                bw.write(String.join("|",
+                        b.getMaBH(),
+                        b.getMaMay(),
+                        b.getMaHD(),
+                        b.getMaKH(),
+                        b.getNgayBatDau(),
+                        b.getNgayKetThuc(),
+                        b.getTinhTrang()));
+                bw.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Lỗi khi ghi file BaoHanh: " + e.getMessage());
+        }
+    }
+
+    private void loadData() {
+        danhSachBaoHanh.clear();
+        try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split("\\|");
+                if (parts.length >= 7) {
+                    BaoHanh b = new BaoHanh(
+                            parts[0], parts[1], parts[2],
+                            parts[3], parts[4], parts[5], parts[6]);
+                    danhSachBaoHanh.add(b);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("File BaoHanh chưa tồn tại hoặc lỗi khi đọc file.");
+        }
     }
 }

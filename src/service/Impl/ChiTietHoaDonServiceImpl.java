@@ -1,13 +1,7 @@
 package service.Impl;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import model.ChiTietHoaDon;
@@ -26,8 +20,8 @@ public class ChiTietHoaDonServiceImpl implements ChiTietHoaDonService {
     public ChiTietHoaDonServiceImpl() {
         danhSachChiTietHoaDon = new ArrayList<>();
         nextMaChiTietHoaDon = 1;
-        hoaDonService = null; // Sẽ được set sau khi HoaDonServiceImpl được tạo
-        khachHangService = new service.Impl.KhachHangServiceImpl();
+        hoaDonService = null; // sẽ được set từ bên ngoài
+        khachHangService = new KhachHangServiceImpl();
         loadData();
     }
 
@@ -36,7 +30,7 @@ public class ChiTietHoaDonServiceImpl implements ChiTietHoaDonService {
         this.hoaDonService = hoaDonService;
     }
 
-    // Tạo mã chi tiết hóa đơn tự động
+    // Sinh mã chi tiết hóa đơn tự động
     private String generateMaChiTietHoaDon() {
         return String.format("CTHD%03d", nextMaChiTietHoaDon++);
     }
@@ -44,20 +38,21 @@ public class ChiTietHoaDonServiceImpl implements ChiTietHoaDonService {
     @Override
     public boolean themChiTietHoaDon(ChiTietHoaDon chiTietHoaDon) {
         try {
-            // Kiểm tra ràng buộc: mã hóa đơn phải tồn tại
-            if (!kiemTraRangBuocHoaDon(chiTietHoaDon.getMaHoaDon())) {
-                System.out.println("Mã hóa đơn không tồn tại: " + chiTietHoaDon.getMaHoaDon());
+            // Kiểm tra mã hóa đơn tồn tại
+            if (!kiemTraRangBuocHoaDon(chiTietHoaDon.getMaHD())) {
+                System.out.println(" Mã hóa đơn không tồn tại: " + chiTietHoaDon.getMaHD());
                 return false;
             }
 
-            // Kiểm tra ràng buộc: mã khách hàng phải tồn tại
-            if (!kiemTraRangBuocKhachHang(chiTietHoaDon.getMaKhachHang())) {
-                System.out.println("Mã khách hàng không tồn tại: " + chiTietHoaDon.getMaKhachHang());
+            // Kiểm tra mã khách hàng tồn tại
+            if (!kiemTraRangBuocKhachHang(chiTietHoaDon.getMaKH())) {
+                System.out.println(" Mã khách hàng không tồn tại: " + chiTietHoaDon.getMaKH());
                 return false;
             }
 
-            // Tự động tạo mã chi tiết hóa đơn
-            chiTietHoaDon.setMaChiTietHoaDon(generateMaChiTietHoaDon());
+            // Tự động sinh mã chi tiết hóa đơn
+            chiTietHoaDon.setMaCTHD(generateMaChiTietHoaDon());
+            chiTietHoaDon.tinhThanhTien();
 
             danhSachChiTietHoaDon.add(chiTietHoaDon);
             saveData();
@@ -74,36 +69,34 @@ public class ChiTietHoaDonServiceImpl implements ChiTietHoaDonService {
     }
 
     @Override
-    public ChiTietHoaDon timChiTietHoaDonTheoMa(String maChiTietHoaDon) {
-        for (ChiTietHoaDon cthd : danhSachChiTietHoaDon) {
-            if (cthd.getMaChiTietHoaDon().equals(maChiTietHoaDon)) {
-                return cthd;
-            }
-        }
-        return null;
+    public ChiTietHoaDon timChiTietHoaDonTheoMa(String maCTHD) {
+        return danhSachChiTietHoaDon.stream()
+                .filter(cthd -> cthd.getMaCTHD().equalsIgnoreCase(maCTHD))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
-    public List<ChiTietHoaDon> timChiTietHoaDonTheoMaHoaDon(String maHoaDon) {
+    public List<ChiTietHoaDon> timChiTietHoaDonTheoMaHoaDon(String maHD) {
         return danhSachChiTietHoaDon.stream()
-                .filter(cthd -> cthd.getMaHoaDon().equals(maHoaDon))
+                .filter(cthd -> cthd.getMaHD().equalsIgnoreCase(maHD))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ChiTietHoaDon> timChiTietHoaDonTheoMaKhachHang(String maKhachHang) {
+    public List<ChiTietHoaDon> timChiTietHoaDonTheoMaKhachHang(String maKH) {
         return danhSachChiTietHoaDon.stream()
-                .filter(cthd -> cthd.getMaKhachHang().equals(maKhachHang))
+                .filter(cthd -> cthd.getMaKH().equalsIgnoreCase(maKH))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<ChiTietHoaDon> timKiemChiTietHoaDon(String tuKhoa) {
         return danhSachChiTietHoaDon.stream()
-                .filter(cthd -> cthd.getMaChiTietHoaDon().toLowerCase().contains(tuKhoa.toLowerCase()) ||
-                        cthd.getMaVe().toLowerCase().contains(tuKhoa.toLowerCase()) ||
-                        cthd.getMaKhachHang().toLowerCase().contains(tuKhoa.toLowerCase()) ||
-                        cthd.getMaHoaDon().toLowerCase().contains(tuKhoa.toLowerCase()))
+                .filter(cthd -> cthd.getMaCTHD().toLowerCase().contains(tuKhoa.toLowerCase()) ||
+                        cthd.getMaHD().toLowerCase().contains(tuKhoa.toLowerCase()) ||
+                        cthd.getMaKH().toLowerCase().contains(tuKhoa.toLowerCase()) ||
+                        cthd.getMaMay().toLowerCase().contains(tuKhoa.toLowerCase()))
                 .collect(Collectors.toList());
     }
 
@@ -111,23 +104,21 @@ public class ChiTietHoaDonServiceImpl implements ChiTietHoaDonService {
     public boolean capNhatChiTietHoaDon(ChiTietHoaDon chiTietHoaDon) {
         try {
             for (int i = 0; i < danhSachChiTietHoaDon.size(); i++) {
-                if (danhSachChiTietHoaDon.get(i).getMaChiTietHoaDon().equals(chiTietHoaDon.getMaChiTietHoaDon())) {
-                    // Kiểm tra ràng buộc nếu mã hóa đơn thay đổi
-                    if (!danhSachChiTietHoaDon.get(i).getMaHoaDon().equals(chiTietHoaDon.getMaHoaDon())) {
-                        if (!kiemTraRangBuocHoaDon(chiTietHoaDon.getMaHoaDon())) {
-                            System.out.println("Mã hóa đơn không tồn tại: " + chiTietHoaDon.getMaHoaDon());
-                            return false;
-                        }
+                if (danhSachChiTietHoaDon.get(i).getMaCTHD().equals(chiTietHoaDon.getMaCTHD())) {
+
+                    // Kiểm tra lại mã hóa đơn
+                    if (!kiemTraRangBuocHoaDon(chiTietHoaDon.getMaHD())) {
+                        System.out.println(" Mã hóa đơn không tồn tại: " + chiTietHoaDon.getMaHD());
+                        return false;
                     }
 
-                    // Kiểm tra ràng buộc nếu mã khách hàng thay đổi
-                    if (!danhSachChiTietHoaDon.get(i).getMaKhachHang().equals(chiTietHoaDon.getMaKhachHang())) {
-                        if (!kiemTraRangBuocKhachHang(chiTietHoaDon.getMaKhachHang())) {
-                            System.out.println("Mã khách hàng không tồn tại: " + chiTietHoaDon.getMaKhachHang());
-                            return false;
-                        }
+                    // Kiểm tra mã khách hàng
+                    if (!kiemTraRangBuocKhachHang(chiTietHoaDon.getMaKH())) {
+                        System.out.println(" Mã khách hàng không tồn tại: " + chiTietHoaDon.getMaKH());
+                        return false;
                     }
 
+                    chiTietHoaDon.tinhThanhTien();
                     danhSachChiTietHoaDon.set(i, chiTietHoaDon);
                     saveData();
                     return true;
@@ -141,90 +132,71 @@ public class ChiTietHoaDonServiceImpl implements ChiTietHoaDonService {
     }
 
     @Override
-    public boolean xoaChiTietHoaDon(String maChiTietHoaDon) {
-        try {
-            for (int i = 0; i < danhSachChiTietHoaDon.size(); i++) {
-                if (danhSachChiTietHoaDon.get(i).getMaChiTietHoaDon().equals(maChiTietHoaDon)) {
-                    danhSachChiTietHoaDon.remove(i);
-                    saveData();
-                    return true;
-                }
-            }
-            return false;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    @Override
-    public boolean xoaTatCaChiTietHoaDonTheoMaHoaDon(String maHoaDon) {
-        try {
-            danhSachChiTietHoaDon.removeIf(cthd -> cthd.getMaHoaDon().equals(maHoaDon));
+    public boolean xoaChiTietHoaDon(String maCTHD) {
+        boolean removed = danhSachChiTietHoaDon.removeIf(cthd -> cthd.getMaCTHD().equalsIgnoreCase(maCTHD));
+        if (removed)
             saveData();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+        return removed;
     }
 
     @Override
-    public boolean kiemTraRangBuocHoaDon(String maHoaDon) {
-        if (hoaDonService == null) {
-            return false;
-        }
-        return hoaDonService.timHoaDonTheoMa(maHoaDon) != null;
+    public boolean xoaTatCaChiTietHoaDonTheoMaHoaDon(String maHD) {
+        boolean removed = danhSachChiTietHoaDon.removeIf(cthd -> cthd.getMaHD().equalsIgnoreCase(maHD));
+        if (removed)
+            saveData();
+        return removed;
     }
 
     @Override
-    public boolean kiemTraRangBuocKhachHang(String maKhachHang) {
-        return khachHangService.timKhachHangTheoMa(maKhachHang) != null;
+    public boolean kiemTraRangBuocHoaDon(String maHD) {
+        return hoaDonService != null && hoaDonService.timHoaDonTheoMa(maHD) != null;
     }
 
     @Override
-    public Double tinhTongTienTheoMaHoaDon(String maHoaDon) {
+    public boolean kiemTraRangBuocKhachHang(String maKH) {
+        return khachHangService != null && khachHangService.timKhachHangTheoMa(maKH) != null;
+    }
+
+    @Override
+    public Double tinhTongTienTheoMaHoaDon(String maHD) {
         return danhSachChiTietHoaDon.stream()
-                .filter(cthd -> cthd.getMaHoaDon().equals(maHoaDon))
-                .mapToDouble(cthd -> cthd.getThanhTien() != null ? cthd.getThanhTien() : 0.0)
+                .filter(cthd -> cthd.getMaHD().equalsIgnoreCase(maHD))
+                .mapToDouble(ChiTietHoaDon::getThanhTien)
                 .sum();
     }
 
     @Override
-    public Double tinhTongTienTheoKhachHang(String maKhachHang) {
+    public Double tinhTongTienTheoKhachHang(String maKH) {
         return danhSachChiTietHoaDon.stream()
-                .filter(cthd -> cthd.getMaKhachHang().equals(maKhachHang))
-                .mapToDouble(cthd -> cthd.getThanhTien() != null ? cthd.getThanhTien() : 0.0)
+                .filter(cthd -> cthd.getMaKH().equalsIgnoreCase(maKH))
+                .mapToDouble(ChiTietHoaDon::getThanhTien)
                 .sum();
     }
 
     @Override
-    public int demSoChiTietHoaDonTheoMaHoaDon(String maHoaDon) {
+    public int demSoChiTietHoaDonTheoMaHoaDon(String maHD) {
         return (int) danhSachChiTietHoaDon.stream()
-                .filter(cthd -> cthd.getMaHoaDon().equals(maHoaDon))
+                .filter(cthd -> cthd.getMaHD().equalsIgnoreCase(maHD))
                 .count();
     }
 
     @Override
     public ChiTietHoaDon layChiTietHoaDonCoThanhTienCaoNhat() {
         return danhSachChiTietHoaDon.stream()
-                .filter(cthd -> cthd.getThanhTien() != null)
-                .max((cthd1, cthd2) -> Double.compare(cthd1.getThanhTien(), cthd2.getThanhTien()))
+                .max(Comparator.comparingDouble(ChiTietHoaDon::getThanhTien))
                 .orElse(null);
     }
 
     @Override
     public ChiTietHoaDon layChiTietHoaDonCoThanhTienThapNhat() {
         return danhSachChiTietHoaDon.stream()
-                .filter(cthd -> cthd.getThanhTien() != null)
-                .min((cthd1, cthd2) -> Double.compare(cthd1.getThanhTien(), cthd2.getThanhTien()))
+                .min(Comparator.comparingDouble(ChiTietHoaDon::getThanhTien))
                 .orElse(null);
     }
 
     @Override
     public Double tinhThanhTienTrungBinh() {
         return danhSachChiTietHoaDon.stream()
-                .filter(cthd -> cthd.getThanhTien() != null)
                 .mapToDouble(ChiTietHoaDon::getThanhTien)
                 .average()
                 .orElse(0.0);
@@ -235,14 +207,16 @@ public class ChiTietHoaDonServiceImpl implements ChiTietHoaDonService {
         return new ArrayList<>(danhSachChiTietHoaDon);
     }
 
-    // Lưu dữ liệu vào file
+    // Lưu dữ liệu ra file
     private void saveData() {
         try (PrintWriter writer = new PrintWriter(new FileWriter(FILE_PATH))) {
             for (ChiTietHoaDon cthd : danhSachChiTietHoaDon) {
-                writer.println(cthd.getMaChiTietHoaDon() + "|" +
-                        cthd.getMaKhachHang() + "|" +
-                        cthd.getMaHoaDon() + "|" +
-                        cthd.getSoLuongKhach() + "|" +
+                writer.println(cthd.getMaCTHD() + "|" +
+                        cthd.getMaHD() + "|" +
+                        cthd.getMaKH() + "|" +
+                        cthd.getMaMay() + "|" +
+                        cthd.getDonGia() + "|" +
+                        cthd.getSoLuong() + "|" +
                         cthd.getThanhTien());
             }
         } catch (IOException e) {
@@ -252,42 +226,45 @@ public class ChiTietHoaDonServiceImpl implements ChiTietHoaDonService {
 
     // Đọc dữ liệu từ file
     private void loadData() {
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
+        File file = new File(FILE_PATH);
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+                return;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null && !line.trim().isEmpty()) {
                 String[] parts = line.split("\\|");
-                if (parts.length == 6) {
+                if (parts.length == 7) {
                     ChiTietHoaDon cthd = new ChiTietHoaDon(
-                            parts[0], // maChiTietHoaDon
-                            parts[1], // maVe
-                            parts[2], // maKhachHang
-                            parts[3], // maHoaDon
-                            Integer.parseInt(parts[4]), // soLuongKhach
-                            Double.parseDouble(parts[5]) // thanhTien
+                            parts[0], // maCTHD
+                            parts[1], // maHD
+                            parts[2], // maKH
+                            parts[3], // maSP
+                            Double.parseDouble(parts[4]), // donGia
+                            Integer.parseInt(parts[5]), // soLuong
+                            Double.parseDouble(parts[6]) // thanhTien
                     );
                     danhSachChiTietHoaDon.add(cthd);
 
-                    // Cập nhật nextMaChiTietHoaDon
-                    String maChiTietHoaDon = parts[0];
-                    if (maChiTietHoaDon.startsWith("CTHD")) {
-                        try {
-                            int so = Integer.parseInt(maChiTietHoaDon.substring(4));
-                            if (so >= nextMaChiTietHoaDon) {
-                                nextMaChiTietHoaDon = so + 1;
-                            }
-                        } catch (NumberFormatException e) {
-                            // Bỏ qua nếu không parse được
+                    // cập nhật mã kế tiếp
+                    try {
+                        int so = Integer.parseInt(parts[0].substring(4));
+                        if (so >= nextMaChiTietHoaDon) {
+                            nextMaChiTietHoaDon = so + 1;
                         }
+                    } catch (NumberFormatException ignore) {
                     }
                 }
             }
         } catch (IOException e) {
-            // File chưa tồn tại hoặc lỗi đọc file, tạo mới
-            try {
-                new File(FILE_PATH).createNewFile();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            e.printStackTrace();
         }
     }
 }

@@ -11,10 +11,10 @@ public interface BaoHanhService {
     List<BaoHanh> layTatCaBaoHanh();
 
     // Tìm bảo hành theo mã
-    BaoHanh timBaoHanhTheoMa(String maBH);
+    BaoHanh timBaoHanhTheoMaBH(String maBH);
 
     // Tìm bảo hành theo mã sản phẩm
-    BaoHanh timBaoHanhTheoMaSanPham(String maSP);
+    BaoHanh timBaoHanhTheoMaMay(String maMay);
 
     // Tìm bảo hành theo thông tin khách hàng
     List<BaoHanh> timKiemBaoHanhTheoKhachHang(String tenKH);
@@ -23,7 +23,7 @@ public interface BaoHanhService {
     List<BaoHanh> timKiemBaoHanhTheoMaHoaDon(String maHD);
 
     // Tìm theo trạng thái bảo hành
-    List<BaoHanh> timKiemBaoHanhTheoTrangThai(String trangThai);
+    List<BaoHanh> timKiemBaoHanhTheoTinhTrang(String tinhTrang);
 
     // Cập nhật bảo hành
     boolean capNhatBaoHanh(BaoHanh baoHanh);
@@ -32,10 +32,10 @@ public interface BaoHanhService {
     boolean xoaBaoHanh(String maBH);
 
     // Cập nhật trạng thái bảo hành
-    boolean capNhatTrangThaiBaoHanh(String maBH, String trangThai);
+    boolean capNhatTrangThaiBaoHanh(String maBH, String tinhTrang);
 
     // Kiểm tra ràng buộc : mã sản phẩm phải tồn tại
-    boolean kiemTraRangBuocMaSanPham(String maSP);
+    boolean kiemTraRangBuocMaSanPham(String maMay);
 
     // Kiểm tra ràng buộc : mã hóa đơn phải tồn tại
     boolean kiemTraRangBuocMaHoaDon(String maHD);
@@ -44,5 +44,5 @@ public interface BaoHanhService {
     int tinhTongSoBaoHanh();
 
     // Thống kê số lượng bảo hành theo trạng thái
-    int thongKeSoLuongBaoHanhTheoTrangThai(String trangThai);
+    int thongKeSoLuongBaoHanhTheoTrangThai(String tinhTrang);
 }

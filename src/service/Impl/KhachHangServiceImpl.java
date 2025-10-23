@@ -32,7 +32,7 @@ public class KhachHangServiceImpl implements KhachHangService {
     @Override
     public boolean themKhachHang(KhachHang khachHang) {
         try {
-            khachHang.setMa_kh(generateMaKh());
+            khachHang.setMaKH(generateMaKh());
             danhSachKhachHang.add(khachHang);
             saveData();
             return true;
@@ -50,7 +50,7 @@ public class KhachHangServiceImpl implements KhachHangService {
     @Override
     public KhachHang timKhachHangTheoMa(String maKh) {
         for (KhachHang kh : danhSachKhachHang) {
-            if (kh.getMa_kh().equals(maKh)) {
+            if (kh.getMaKH().equals(maKh)) {
                 return kh;
             }
         }
@@ -61,7 +61,7 @@ public class KhachHangServiceImpl implements KhachHangService {
     public List<KhachHang> timKhachHangTheoHoTen(String hoTen) {
         List<KhachHang> ketQua = new ArrayList<>();
         for (KhachHang kh : danhSachKhachHang) {
-            if (kh.getHovaTen().toLowerCase().contains(hoTen.toLowerCase())) {
+            if (kh.getHoTen().toLowerCase().contains(hoTen.toLowerCase())) {
                 ketQua.add(kh);
             }
         }
@@ -94,8 +94,8 @@ public class KhachHangServiceImpl implements KhachHangService {
     public List<KhachHang> timKiemKhachHang(String tuKhoa) {
         List<KhachHang> ketQua = new ArrayList<>();
         for (KhachHang kh : danhSachKhachHang) {
-            if (kh.getMa_kh().toLowerCase().contains(tuKhoa.toLowerCase()) ||
-                    kh.getHovaTen().toLowerCase().contains(tuKhoa.toLowerCase()) ||
+            if (kh.getMaKH().toLowerCase().contains(tuKhoa.toLowerCase()) ||
+                    kh.getHoTen().toLowerCase().contains(tuKhoa.toLowerCase()) ||
                     kh.getCMND().contains(tuKhoa) ||
                     kh.getSDT().contains(tuKhoa)) {
                 ketQua.add(kh);
@@ -108,7 +108,7 @@ public class KhachHangServiceImpl implements KhachHangService {
     public boolean capNhatKhachHang(KhachHang khachHang) {
         try {
             for (int i = 0; i < danhSachKhachHang.size(); i++) {
-                if (danhSachKhachHang.get(i).getMa_kh().equals(khachHang.getMa_kh())) {
+                if (danhSachKhachHang.get(i).getMaKH().equals(khachHang.getMaKH())) {
                     danhSachKhachHang.set(i, khachHang);
                     saveData();
                     return true;
@@ -122,10 +122,10 @@ public class KhachHangServiceImpl implements KhachHangService {
     }
 
     @Override
-    public boolean xoaKhachHang(String maKh) {
+    public boolean xoaKhachHang(String maKH) {
         try {
             for (int i = 0; i < danhSachKhachHang.size(); i++) {
-                if (danhSachKhachHang.get(i).getMa_kh().equals(maKh)) {
+                if (danhSachKhachHang.get(i).getMaKH().equals(maKH)) {
                     danhSachKhachHang.remove(i);
                     saveData();
                     return true;
@@ -142,8 +142,8 @@ public class KhachHangServiceImpl implements KhachHangService {
     private void saveData() {
         try (PrintWriter writer = new PrintWriter(new FileWriter(FILE_PATH))) {
             for (KhachHang kh : danhSachKhachHang) {
-                writer.println(kh.getMa_kh() + "|" +
-                        kh.getHovaTen() + "|" +
+                writer.println(kh.getMaKH() + "|" +
+                        kh.getHoTen() + "|" +
                         kh.getNgaySinh() + "|" +
                         kh.getGioiTinh() + "|" +
                         kh.getDiaChi() + "|" +
@@ -174,10 +174,10 @@ public class KhachHangServiceImpl implements KhachHangService {
                     danhSachKhachHang.add(kh);
 
                     // Cập nhật nextMaKh
-                    String maKh = parts[0];
-                    if (maKh.startsWith("KH")) {
+                    String maKH = parts[0];
+                    if (maKH.startsWith("KH")) {
                         try {
-                            int so = Integer.parseInt(maKh.substring(2));
+                            int so = Integer.parseInt(maKH.substring(2));
                             if (so >= nextMaKh) {
                                 nextMaKh = so + 1;
                             }

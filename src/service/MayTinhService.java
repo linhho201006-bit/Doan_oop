@@ -44,11 +44,11 @@ public interface MayTinhService {
     // Tìm pc theo loại CPU
     List<PC> timKiemPCTheoLoaiCPU(String loaiCPU);
 
+    // Tìm kiếm laptop theo trọng lượng
+    List<LapTop> timKiemLapTopTheoTrongLuong(double trongLuong);
+
     // Tìm laptop theo kích thước màn hình
     List<LapTop> timKiemLapTopTheoKichThuocManHinh(double kichThuocManHinh);
-
-    // Tìm kiếm laptop theo loại pin
-    List<LapTop> timKiemLapTopTheoLoaiPin(String loaiPin);
 
     // Tìm kiếm tổng hợp máy tính
     List<MayTinh> timKiemTongHop(String tuKhoa);
