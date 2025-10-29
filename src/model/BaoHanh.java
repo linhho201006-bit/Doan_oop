@@ -1,18 +1,20 @@
 package model;
 
+import java.sql.Date;
+
 public class BaoHanh {
     private String maBH;
     private String maHD;
     private String maMay;
     private String maKH;
-    private String ngayBatDau;
-    private String ngayKetThuc;
+    private Date ngayBatDau;
+    private Date ngayKetThuc;
     private String tinhTrang; // Tình trạng (Còn hiệu lực / Hết hạn / Đang xử lý)
 
     public BaoHanh() {
     }
 
-    public BaoHanh(String maBH, String maHD, String maMay, String maKH, String ngayBatDau, String ngayKetThuc,
+    public BaoHanh(String maBH, String maHD, String maMay, String maKH, Date ngayBatDau, Date ngayKetThuc,
             String tinhTrang) {
         this.maBH = maBH;
         this.maHD = maHD;
@@ -56,19 +58,19 @@ public class BaoHanh {
         this.maKH = maKH;
     }
 
-    public String getNgayBatDau() {
+    public Date getNgayBatDau() {
         return ngayBatDau;
     }
 
-    public void setNgayBatDau(String ngayBatDau) {
+    public void setNgayBatDau(Date ngayBatDau) {
         this.ngayBatDau = ngayBatDau;
     }
 
-    public String getNgayKetThuc() {
+    public Date getNgayKetThuc() {
         return ngayKetThuc;
     }
 
-    public void setNgayKetThuc(String ngayKetThuc) {
+    public void setNgayKetThuc(Date ngayKetThuc) {
         this.ngayKetThuc = ngayKetThuc;
     }
 

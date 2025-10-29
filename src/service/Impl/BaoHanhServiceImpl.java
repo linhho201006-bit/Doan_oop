@@ -1,8 +1,8 @@
 package service.Impl;
 
 import java.io.*;
+import java.sql.Date;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import model.BaoHanh;
 import service.BaoHanhService;
@@ -17,7 +17,7 @@ public class BaoHanhServiceImpl implements BaoHanhService {
         loadData();
     }
 
-    // ✅ Hàm sinh mã tự động
+    // Sinh mã tự động
     private String taoMaTuDong() {
         return String.format("BH%03d", nextMaBH++);
     }
@@ -27,7 +27,7 @@ public class BaoHanhServiceImpl implements BaoHanhService {
         if (baoHanh == null)
             return false;
 
-        // ✅ Sinh mã tự động nếu chưa có
+        // Sinh mã tự động nếu chưa có
         if (baoHanh.getMaBH() == null || baoHanh.getMaBH().trim().isEmpty()) {
             baoHanh.setMaBH(taoMaTuDong());
         } else if (timBaoHanhTheoMaBH(baoHanh.getMaBH()) != null) {
@@ -61,27 +61,6 @@ public class BaoHanhServiceImpl implements BaoHanhService {
     }
 
     @Override
-    public List<BaoHanh> timKiemBaoHanhTheoKhachHang(String tenKH) {
-        return danhSachBaoHanh.stream()
-                .filter(b -> b.getMaKH().toLowerCase().contains(tenKH.toLowerCase()))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<BaoHanh> timKiemBaoHanhTheoMaHoaDon(String maHD) {
-        return danhSachBaoHanh.stream()
-                .filter(b -> b.getMaHD().equalsIgnoreCase(maHD))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<BaoHanh> timKiemBaoHanhTheoTinhTrang(String tinhTrang) {
-        return danhSachBaoHanh.stream()
-                .filter(b -> b.getTinhTrang().equalsIgnoreCase(tinhTrang))
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public boolean capNhatBaoHanh(BaoHanh baoHanh) {
         for (int i = 0; i < danhSachBaoHanh.size(); i++) {
             if (danhSachBaoHanh.get(i).getMaBH().equalsIgnoreCase(baoHanh.getMaBH())) {
@@ -99,18 +78,6 @@ public class BaoHanhServiceImpl implements BaoHanhService {
         if (removed)
             saveData();
         return removed;
-    }
-
-    @Override
-    public boolean capNhatTrangThaiBaoHanh(String maBH, String tinhTrang) {
-        for (BaoHanh b : danhSachBaoHanh) {
-            if (b.getMaBH().equalsIgnoreCase(maBH)) {
-                b.setTinhTrang(tinhTrang);
-                saveData();
-                return true;
-            }
-        }
-        return false;
     }
 
     @Override
@@ -137,16 +104,17 @@ public class BaoHanhServiceImpl implements BaoHanhService {
                 .count();
     }
 
+    // Ghi dữ liệu ra file
     private void saveData() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PATH))) {
             for (BaoHanh b : danhSachBaoHanh) {
                 bw.write(String.join("|",
                         b.getMaBH(),
-                        b.getMaMay(),
                         b.getMaHD(),
+                        b.getMaMay(),
                         b.getMaKH(),
-                        b.getNgayBatDau(),
-                        b.getNgayKetThuc(),
+                        b.getNgayBatDau().toString(),
+                        b.getNgayKetThuc().toString(),
                         b.getTinhTrang()));
                 bw.newLine();
             }
@@ -155,21 +123,39 @@ public class BaoHanhServiceImpl implements BaoHanhService {
         }
     }
 
+    // Đọc dữ liệu từ file
     private void loadData() {
         danhSachBaoHanh.clear();
+        File file = new File(FILE_PATH);
+        if (!file.exists())
+            return;
+
         try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split("\\|");
-                if (parts.length >= 7) {
+                if (parts.length == 7) {
                     BaoHanh b = new BaoHanh(
-                            parts[0], parts[1], parts[2],
-                            parts[3], parts[4], parts[5], parts[6]);
+                            parts[0],
+                            parts[1],
+                            parts[2],
+                            parts[3],
+                            Date.valueOf(parts[4]),
+                            Date.valueOf(parts[5]),
+                            parts[6]);
                     danhSachBaoHanh.add(b);
+
+                    // Cập nhật nextMaBH
+                    try {
+                        int num = Integer.parseInt(parts[0].replace("BH", ""));
+                        if (num >= nextMaBH)
+                            nextMaBH = num + 1;
+                    } catch (NumberFormatException ignored) {
+                    }
                 }
             }
         } catch (IOException e) {
-            System.out.println("File BaoHanh chưa tồn tại hoặc lỗi khi đọc file.");
+            System.out.println("Lỗi đọc file BaoHanh: " + e.getMessage());
         }
     }
 }

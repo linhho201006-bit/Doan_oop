@@ -8,9 +8,11 @@ public class ChiTietPhieuNhapHang {
     private double donGia;
     private double thanhTien;
 
-    public ChiTietPhieuNhapHang(){}
+    public ChiTietPhieuNhapHang() {
+    }
 
-    public ChiTietPhieuNhapHang(String maCTPNH, String maPhieuNhap, String maMay, int soLuong, double donGia, double thanhTien) {
+    public ChiTietPhieuNhapHang(String maCTPNH, String maPhieuNhap, String maMay, int soLuong, double donGia,
+            double thanhTien) {
         this.maCTPNH = maCTPNH;
         this.maPhieuNhap = maPhieuNhap;
         this.maMay = maMay;
@@ -23,10 +25,10 @@ public class ChiTietPhieuNhapHang {
     public String getMaCTPNH() {
         return maCTPNH;
     }
-    
+
     public String getMaPhieuNhap() {
         return maPhieuNhap;
-    }   
+    }
 
     public String getMaMay() {
         return maMay;
@@ -68,17 +70,18 @@ public class ChiTietPhieuNhapHang {
         this.thanhTien = thanhTien;
     }
 
-    //phương thức tính thành tiền
-    public void tinhThanhTien(){
-        if(donGia != 0 && soLuong != 0){
+    // phương thức tính thành tiền
+    public void tinhThanhTien() {
+        if (donGia != 0 && soLuong != 0) {
             thanhTien = donGia * soLuong;
         }
     }
+
     @Override
     public String toString() {
-        return "ChiTietPhieuNhapHang[maCTPNH:" + maCTPNH +", maPhieuNhap:'" + maPhieuNhap + 
-                ", maMay:'" + maMay + ", soLuong:" + soLuong +
-                ", donGia:" + donGia +", thanhTien:" + thanhTien + "]'";
+        return "ChiTietPhieuNhapHang[Ma CTPNH:" + maCTPNH + ", Ma Phieu Nhap:'" + maPhieuNhap +
+                ", Ma may:'" + maMay + ", So luong:" + soLuong +
+                ", Don gia:" + donGia + ", Thanh tien:" + thanhTien + "]'";
     }
-   
+
 }

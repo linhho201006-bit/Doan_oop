@@ -75,40 +75,6 @@ public class TaiKhoanServiceImpl implements TaiKhoanService {
     }
 
     @Override
-    public List<TaiKhoan> timKiemTaiKhoanTheoVaiTro(String vaiTro) {
-        List<TaiKhoan> ketQua = new ArrayList<>();
-        for (TaiKhoan tk : danhSachTaiKhoan) {
-            if (tk.getVaiTro().equalsIgnoreCase(vaiTro)) {
-                ketQua.add(tk);
-            }
-        }
-        return ketQua;
-    }
-
-    @Override
-    public boolean capNhatTaiKhoan(TaiKhoan taiKhoan) {
-        for (int i = 0; i < danhSachTaiKhoan.size(); i++) {
-            if (danhSachTaiKhoan.get(i).getTenDangNhap().equalsIgnoreCase(taiKhoan.getTenDangNhap())) {
-                danhSachTaiKhoan.set(i, taiKhoan);
-                ghiFile();
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean xoaTaiKhoan(String tenDangNhap) {
-        TaiKhoan tk = timTaiKhoanTheoTenDangNhap(tenDangNhap);
-        if (tk != null) {
-            danhSachTaiKhoan.remove(tk);
-            ghiFile();
-            return true;
-        }
-        return false;
-    }
-
-    @Override
     public TaiKhoan dangNhap(String tenDangNhap, String matKhau) {
         for (TaiKhoan tk : danhSachTaiKhoan) {
             if (tk.getTenDangNhap().equalsIgnoreCase(tenDangNhap)
@@ -150,6 +116,31 @@ public class TaiKhoanServiceImpl implements TaiKhoanService {
         }
         return true;
     }
+
+    
+    @Override
+    public boolean capNhatTaiKhoan(TaiKhoan taiKhoan) {
+        for (int i = 0; i < danhSachTaiKhoan.size(); i++) {
+            if (danhSachTaiKhoan.get(i).getTenDangNhap().equalsIgnoreCase(taiKhoan.getTenDangNhap())) {
+                danhSachTaiKhoan.set(i, taiKhoan);
+                ghiFile();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean xoaTaiKhoan(String tenDangNhap) {
+        TaiKhoan tk = timTaiKhoanTheoTenDangNhap(tenDangNhap);
+        if (tk != null) {
+            danhSachTaiKhoan.remove(tk);
+            ghiFile();
+            return true;
+        }
+        return false;
+    }
+
 
     @Override
     public int thongKeSoLuongTaiKhoanTheoVaiTro(String vaiTro) {

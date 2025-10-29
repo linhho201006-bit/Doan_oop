@@ -9,8 +9,8 @@ public class PC extends MayTinh {
     public PC() {
     }
 
-    public PC(String maMay, String tenMay, String hangSX, double gia, int ram, String loaiCPU) {
-        super(maMay, tenMay, hangSX, gia);
+    public PC(String maMay, String tenMay, String hangSX, double gia, String maNCC, int ram, String loaiCPU) {
+        super(maMay, tenMay, hangSX, gia, maNCC);
         this.loaiCPU = loaiCPU;
         this.ram = ram;
     }

@@ -27,8 +27,7 @@ public class BaoHanhController {
             System.out.println("3. Tìm kiếm bảo hành");
             System.out.println("4. Cập nhật bảo hành");
             System.out.println("5. Xóa bảo hành");
-            System.out.println("6. Cập nhật trạng thái bảo hành");
-            System.out.println("7. Thống kê số lượng bảo hành theo trạng thái");
+            System.out.println("6. Thống kê số lượng bảo hành theo trạng thái");
             System.out.println("0. Thoát");
             System.out.print("Chọn chức năng: ");
 
@@ -41,13 +40,12 @@ public class BaoHanhController {
                 case 3 -> timKiemBaoHanh();
                 case 4 -> capNhatBaoHanh();
                 case 5 -> xoaBaoHanh();
-                case 6 -> capNhatTrangThai();
-                case 7 -> thongKeTheoTrangThai();
+                case 6 -> thongKeTheoTrangThai();
                 case 0 -> {
                     System.out.println("Đã thoát quản lý bảo hành!");
                     return;
                 }
-                default -> System.out.println(" Lựa chọn không hợp lệ!");
+                default -> System.out.println("Lựa chọn không hợp lệ!");
             }
         }
     }
@@ -75,20 +73,19 @@ public class BaoHanhController {
         String maKH = scanner.nextLine();
 
         System.out.print("Nhập ngày bắt đầu (yyyy-MM-dd): ");
-        String ngayBD = scanner.nextLine();
-        System.out.print("Nhập ngày kết thúc (yyyy-MM-dd): ");
-        String ngayKT = scanner.nextLine();
+        Date ngayBD = Date.valueOf(scanner.nextLine());
 
-        Date sqlNgayBD = Date.valueOf(ngayBD);
-        Date sqlNgayKT = Date.valueOf(ngayKT);
+        System.out.print("Nhập ngày kết thúc (yyyy-MM-dd): ");
+        Date ngayKT = Date.valueOf(scanner.nextLine());
 
         System.out.print("Nhập tình trạng (Còn hiệu lực / Hết hạn / Đang xử lý): ");
         String tinhTrang = scanner.nextLine();
 
-        BaoHanh bh = new BaoHanh("", maHD, maMay, maKH, sqlNgayBD.toString(), sqlNgayKT.toString(), tinhTrang);
+        // Mã bảo hành để trống, service có thể tự sinh
+        BaoHanh bh = new BaoHanh("", maHD, maMay, maKH, ngayBD, ngayKT, tinhTrang);
 
         if (baoHanhService.taoBaoHanh(bh)) {
-            System.out.println("Thêm bảo hành thành công! Mã BH: " + bh.getMaBH());
+            System.out.println("Thêm bảo hành thành công!");
         } else {
             System.out.println("Thêm bảo hành thất bại!");
         }
@@ -119,9 +116,6 @@ public class BaoHanhController {
         System.out.println("\n=== TÌM KIẾM BẢO HÀNH ===");
         System.out.println("1. Theo mã bảo hành");
         System.out.println("2. Theo mã máy");
-        System.out.println("3. Theo mã hóa đơn");
-        System.out.println("4. Theo khách hàng");
-        System.out.println("5. Theo tình trạng");
         System.out.print("Chọn: ");
         int c = scanner.nextInt();
         scanner.nextLine();
@@ -145,33 +139,6 @@ public class BaoHanhController {
                 else
                     System.out.println("Không tìm thấy!");
             }
-            case 3 -> {
-                System.out.print("Nhập mã hóa đơn: ");
-                String maHD = scanner.nextLine();
-                List<BaoHanh> ds = baoHanhService.timKiemBaoHanhTheoMaHoaDon(maHD);
-                if (ds.isEmpty())
-                    System.out.println("Không tìm thấy!");
-                else
-                    ds.forEach(this::hienThiThongTinBaoHanh);
-            }
-            case 4 -> {
-                System.out.print("Nhập tên khách hàng: ");
-                String tenKH = scanner.nextLine();
-                List<BaoHanh> ds = baoHanhService.timKiemBaoHanhTheoKhachHang(tenKH);
-                if (ds.isEmpty())
-                    System.out.println("Không tìm thấy!");
-                else
-                    ds.forEach(this::hienThiThongTinBaoHanh);
-            }
-            case 5 -> {
-                System.out.print("Nhập tình trạng: ");
-                String tt = scanner.nextLine();
-                List<BaoHanh> ds = baoHanhService.timKiemBaoHanhTheoTinhTrang(tt);
-                if (ds.isEmpty())
-                    System.out.println("Không tìm thấy!");
-                else
-                    ds.forEach(this::hienThiThongTinBaoHanh);
-            }
             default -> System.out.println("Lựa chọn không hợp lệ!");
         }
     }
@@ -191,12 +158,12 @@ public class BaoHanhController {
         System.out.print("Ngày bắt đầu (" + bh.getNgayBatDau() + "): ");
         String bd = scanner.nextLine();
         if (!bd.isEmpty())
-            bh.setNgayBatDau(bd);
+            bh.setNgayBatDau(Date.valueOf(bd));
 
         System.out.print("Ngày kết thúc (" + bh.getNgayKetThuc() + "): ");
         String kt = scanner.nextLine();
         if (!kt.isEmpty())
-            bh.setNgayKetThuc(kt);
+            bh.setNgayKetThuc(Date.valueOf(kt));
 
         System.out.print("Tình trạng (" + bh.getTinhTrang() + "): ");
         String tt = scanner.nextLine();
@@ -221,24 +188,10 @@ public class BaoHanhController {
             System.out.println("Không tìm thấy mã bảo hành!");
     }
 
-    // ================= 6. CẬP NHẬT TRẠNG THÁI =================
-    private void capNhatTrangThai() {
-        System.out.println("\n=== CẬP NHẬT TRẠNG THÁI BẢO HÀNH ===");
-        System.out.print("Nhập mã bảo hành: ");
-        String ma = scanner.nextLine();
-        System.out.print("Nhập tình trạng mới: ");
-        String tt = scanner.nextLine();
-
-        if (baoHanhService.capNhatTrangThaiBaoHanh(ma, tt))
-            System.out.println("Cập nhật trạng thái thành công!");
-        else
-            System.out.println("Cập nhật thất bại!");
-    }
-
-    // ================= 7. THỐNG KÊ =================
+    // ================= 6. THỐNG KÊ =================
     private void thongKeTheoTrangThai() {
-        System.out.println("\n=== THỐNG KÊ SỐ LƯỢNG BẢO HÀNH THEO TRẠNG THÁI ===");
-        System.out.print("Nhập tình trạng cần thống kê: ");
+        System.out.println("\n=== THỐNG KÊ BẢO HÀNH THEO TRẠNG THÁI ===");
+        System.out.print("Nhập tình trạng: ");
         String tt = scanner.nextLine();
         int soLuong = baoHanhService.thongKeSoLuongBaoHanhTheoTrangThai(tt);
         System.out.println("Số lượng bảo hành có trạng thái '" + tt + "': " + soLuong);

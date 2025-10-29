@@ -1,0 +1,5 @@
+PC001 | Intel i5-12400F | 16 | 18000000 | Dell
+PC002 | Ryzen 5 5600G | 16 | 15000000 | Asus
+PC003 | Intel i7-13700K | 32 | 25000000 | HP
+PC004 | Ryzen 9 7900X | 32 | 28000000 | Acer
+PC005 | Intel i5-13400F | 16 | 17000000 | Lenovo

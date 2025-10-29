@@ -1,0 +1,5 @@
+LT001 | Dell XPS 13 | 13000000 | Dell | 1.3 | 13.3
+LT002 | Asus Zenbook 14 | 14000000 | Asus | 1.2 | 14
+LT003 | HP Envy 15 | 15000000 | HP | 1.8 | 15.6
+LT004 | Acer Swift 3 | 12000000 | Acer | 1.3 | 14
+LT005 | Lenovo Yoga Slim 7 | 16000000 | Lenovo | 1.4 | 14

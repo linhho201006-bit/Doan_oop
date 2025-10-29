@@ -3,7 +3,6 @@ package service.Impl;
 import model.PhieuNhapHang;
 import service.PhieuNhapHangService;
 import service.NhaCungCapService;
-
 import java.io.*;
 import java.sql.Date;
 import java.util.*;
@@ -30,7 +29,7 @@ public class PhieuNhapHangServiceImpl implements PhieuNhapHangService {
         if (p == null)
             return false;
 
-        if (!kiemTraRangBuocMaNhaCungCap(p.getMaNhaCungCap())) {
+        if (!kiemTraRangBuocMaNhaCungCap(p.getMaNCC())) {
             System.err.println("Mã nhà cung cấp không tồn tại!");
             return false;
         }
@@ -56,95 +55,11 @@ public class PhieuNhapHangServiceImpl implements PhieuNhapHangService {
     }
 
     @Override
-    public List<PhieuNhapHang> timKiemPhieuNhapHangTheoNgayNhap(String ngayNhap) {
-        List<PhieuNhapHang> ketQua = new ArrayList<>();
-        try {
-            Date dateNhap = Date.valueOf(ngayNhap);
-            for (PhieuNhapHang phieu : danhSachPhieuNhap) {
-                if (phieu.getNgayNhap() != null && phieu.getNgayNhap().equals(dateNhap)) {
-                    ketQua.add(phieu);
-                }
-            }
-        } catch (IllegalArgumentException e) {
-            System.out.println("Định dạng ngày nhập không hợp lệ. Dạng hợp lệ: yyyy-MM-dd");
-        }
-        return ketQua;
-    }
-
-    @Override
-    public List<PhieuNhapHang> timKiemPhieuNhapHangTheoNgayThanhToan(String ngayThanhToan) {
-        List<PhieuNhapHang> ketQua = new ArrayList<>();
-        try {
-            Date dateThanhToan = Date.valueOf(ngayThanhToan);
-            for (PhieuNhapHang phieu : danhSachPhieuNhap) {
-                if (phieu.getNgayThanhToan() != null && phieu.getNgayThanhToan().equals(dateThanhToan)) {
-                    ketQua.add(phieu);
-                }
-            }
-        } catch (IllegalArgumentException e) {
-            System.out.println("Định dạng ngày thanh toán không hợp lệ. Dạng hợp lệ: yyyy-MM-dd");
-        }
-        return ketQua;
-    }
-
-    @Override
-    public List<PhieuNhapHang> timKiemPhieuNhapHangTheoTrangThai(String trangThai) {
-        List<PhieuNhapHang> ketQua = new ArrayList<>();
-        for (PhieuNhapHang phieu : danhSachPhieuNhap) {
-            if (phieu.getTrangThai() != null && phieu.getTrangThai().equalsIgnoreCase(trangThai)) {
-                ketQua.add(phieu);
-            }
-        }
-        return ketQua;
-    }
-
-    @Override
-    public List<PhieuNhapHang> timKiemPhieuNhapHangTheoPhuongThucThanhToan(String phuongThucThanhToan) {
-        List<PhieuNhapHang> ketQua = new ArrayList<>();
-        for (PhieuNhapHang phieu : danhSachPhieuNhap) {
-            if (phieu.getPhuongThucThanhToan() != null &&
-                    phieu.getPhuongThucThanhToan().equalsIgnoreCase(phuongThucThanhToan)) {
-                ketQua.add(phieu);
-            }
-        }
-        return ketQua;
-    }
-
-    // ✅ implement đúng theo interface
-    @Override
-    public List<PhieuNhapHang> timKiemPhieuNhapHangTheoNhaCungCap(String maNCC) {
-        List<PhieuNhapHang> ketQua = new ArrayList<>();
-        for (PhieuNhapHang p : danhSachPhieuNhap) {
-            if (p.getMaNhaCungCap().equalsIgnoreCase(maNCC)) {
-                ketQua.add(p);
-            }
-        }
-        return ketQua;
-    }
-
-    @Override
-    public List<PhieuNhapHang> timPhieuNhapHangTheoNhaCungCap(String maNhaCungCap) {
+    public List<PhieuNhapHang> timPhieuNhapHangTheoNhaCungCap(String maNCC) {
         List<PhieuNhapHang> kq = new ArrayList<>();
         for (PhieuNhapHang p : danhSachPhieuNhap) {
-            if (p.getMaNhaCungCap().equalsIgnoreCase(maNhaCungCap))
+            if (p.getMaNCC().equalsIgnoreCase(maNCC))
                 kq.add(p);
-        }
-        return kq;
-    }
-
-    @Override
-    public List<PhieuNhapHang> timPhieuNhapHangTheoKhoangThoiGian(String tuNgay, String denNgay) {
-        List<PhieuNhapHang> kq = new ArrayList<>();
-        try {
-            Date start = Date.valueOf(tuNgay);
-            Date end = Date.valueOf(denNgay);
-            for (PhieuNhapHang p : danhSachPhieuNhap) {
-                Date ngayNhap = p.getNgayNhap(); // ✅ không dùng Date.valueOf() nữa
-                if (ngayNhap != null && !ngayNhap.before(start) && !ngayNhap.after(end))
-                    kq.add(p);
-            }
-        } catch (IllegalArgumentException e) {
-            System.err.println("Lỗi định dạng ngày tháng (phải là yyyy-MM-dd)");
         }
         return kq;
     }
@@ -155,7 +70,7 @@ public class PhieuNhapHangServiceImpl implements PhieuNhapHangService {
         tuKhoa = tuKhoa.toLowerCase();
         for (PhieuNhapHang p : danhSachPhieuNhap) {
             if (p.getMaPhieuNhap().toLowerCase().contains(tuKhoa)
-                    || p.getMaNhaCungCap().toLowerCase().contains(tuKhoa)
+                    || p.getMaNCC().toLowerCase().contains(tuKhoa)
                     || (p.getTrangThai() != null && p.getTrangThai().toLowerCase().contains(tuKhoa))
                     || (p.getPhuongThucThanhToan() != null
                             && p.getPhuongThucThanhToan().toLowerCase().contains(tuKhoa))) {
@@ -230,13 +145,14 @@ public class PhieuNhapHangServiceImpl implements PhieuNhapHangService {
     }
 
     @Override
-    public Double thongKeTongTienNhapHangTheoKhoangThoiGian(String tuNgay, String denNgay) {
-        List<PhieuNhapHang> ds = timPhieuNhapHangTheoKhoangThoiGian(tuNgay, denNgay);
-        double tong = 0;
-        for (PhieuNhapHang p : ds) {
-            tong += p.getTongTien();
+    public List<PhieuNhapHang> timKiemPhieuNhapHangTheoTrangThai(String trangThai) {
+        List<PhieuNhapHang> ketQua = new ArrayList<>();
+        for (PhieuNhapHang phieu : danhSachPhieuNhap) {
+            if (phieu.getTrangThai() != null && phieu.getTrangThai().equalsIgnoreCase(trangThai)) {
+                ketQua.add(phieu);
+            }
         }
-        return tong;
+        return ketQua;
     }
 
     @Override
@@ -248,7 +164,7 @@ public class PhieuNhapHangServiceImpl implements PhieuNhapHangService {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
             for (PhieuNhapHang p : danhSachPhieuNhap) {
                 writer.write(p.getMaPhieuNhap() + "|" +
-                        p.getMaNhaCungCap() + "|" +
+                        p.getMaNCC() + "|" +
                         p.getNgayNhap() + "|" +
                         (p.getNgayThanhToan() == null ? "null" : p.getNgayThanhToan()) + "|" +
                         (p.getPhuongThucThanhToan() == null ? "null" : p.getPhuongThucThanhToan()) + "|" +
@@ -275,7 +191,7 @@ public class PhieuNhapHangServiceImpl implements PhieuNhapHangService {
                             parts[0], // maPhieuNhap
                             parts[1], // maNhaCungCap
                             Date.valueOf(parts[2]), // ngày nhập
-                            parts[3].equals("null") ? null : Date.valueOf(parts[3]), // ✅ ngày thanh toán
+                            parts[3].equals("null") ? null : Date.valueOf(parts[3]), // ngày thanh toán
                             parts[4].equals("null") ? null : parts[4], // phương thức thanh toán
                             parts[5].equals("null") ? null : parts[5], // trạng thái
                             Double.parseDouble(parts[6]) // tổng tiền

@@ -9,8 +9,9 @@ public class LapTop extends MayTinh {
     public LapTop() {
     }
 
-    public LapTop(String maMay, String tenMay, String hangSX, Double gia, Double trongLuong, Double kichThuocManHinh) {
-        super(maMay, tenMay, hangSX, gia);
+    public LapTop(String maMay, String tenMay, String hangSX, Double gia, String maNCC, Double trongLuong,
+            Double kichThuocManHinh) {
+        super(maMay, tenMay, hangSX, gia, maNCC);
         this.trongLuong = trongLuong;
         this.kichThuocManHinh = kichThuocManHinh;
     }
@@ -42,6 +43,6 @@ public class LapTop extends MayTinh {
 
     @Override
     public String toString() {
-        return "LapTop [Trong luong: " + trongLuong + " Kich Thuoc Man Hinh: " + kichThuocManHinh + "]";
+        return "LapTop [Trong luong: " + trongLuong + ", Kich thuoc man hinh: " + kichThuocManHinh + "]";
     }
 }

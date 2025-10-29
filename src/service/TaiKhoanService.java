@@ -16,15 +16,6 @@ public interface TaiKhoanService {
     // Tìm Kiếm tài khoản theo mã nhân viên
     TaiKhoan timTaiKhoanTheoMaNV(String maNV);
 
-    // Tìm kiếm tài khoản theo vai trò
-    List<TaiKhoan> timKiemTaiKhoanTheoVaiTro(String vaiTro);
-
-    // Cập nhật tài khoản
-    boolean capNhatTaiKhoan(TaiKhoan taiKhoan);
-
-    // Xóa tài khoản
-    boolean xoaTaiKhoan(String tenDangNhap);
-
     // Đăng nhập
     TaiKhoan dangNhap(String tenDangNhap, String matKhau);
 
@@ -37,7 +28,13 @@ public interface TaiKhoanService {
     // Kiểm tra ràng buộc : tên đăng nhập phải duy nhất
     boolean kiemTraRangBuocTenDangNhap(String tenDangNhap);
 
-    // Thống kê số lượng tài khoản theo vai trò
+    // Cập nhật tài khoản
+    boolean capNhatTaiKhoan(TaiKhoan taiKhoan);
+
+    // Xóa tài khoản
+    boolean xoaTaiKhoan(String tenDangNhap);
+
+    // Thống kê số lượng tk theo vai trò
     int thongKeSoLuongTaiKhoanTheoVaiTro(String vaiTro);
 
 }

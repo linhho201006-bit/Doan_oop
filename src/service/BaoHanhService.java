@@ -16,23 +16,11 @@ public interface BaoHanhService {
     // Tìm bảo hành theo mã sản phẩm
     BaoHanh timBaoHanhTheoMaMay(String maMay);
 
-    // Tìm bảo hành theo thông tin khách hàng
-    List<BaoHanh> timKiemBaoHanhTheoKhachHang(String tenKH);
-
-    // Tìm kiếm theo mã hóa đơn
-    List<BaoHanh> timKiemBaoHanhTheoMaHoaDon(String maHD);
-
-    // Tìm theo trạng thái bảo hành
-    List<BaoHanh> timKiemBaoHanhTheoTinhTrang(String tinhTrang);
-
     // Cập nhật bảo hành
     boolean capNhatBaoHanh(BaoHanh baoHanh);
 
     // Xóa bảo hành
     boolean xoaBaoHanh(String maBH);
-
-    // Cập nhật trạng thái bảo hành
-    boolean capNhatTrangThaiBaoHanh(String maBH, String tinhTrang);
 
     // Kiểm tra ràng buộc : mã sản phẩm phải tồn tại
     boolean kiemTraRangBuocMaSanPham(String maMay);

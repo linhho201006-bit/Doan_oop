@@ -15,21 +15,16 @@ public class ChiTietPhieuNhapHangServiceImpl implements ChiTietPhieuNhapHangServ
         docDuLieuTuFile();
     }
 
-    // ==========================
-    // 1️⃣ Lưu & đọc file
-    // ==========================
     private void luuDuLieuRaFile() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PATH))) {
             for (ChiTietPhieuNhapHang c : danhSachChiTiet) {
                 bw.write(String.join("|",
                         c.getMaCTPNH(),
-                        c.getMaPhieuNhapHang(),
-                        c.getMaSanPham(),
+                        c.getMaPhieuNhap(),
+                        c.getMaMay(),
                         String.valueOf(c.getSoLuong()),
                         String.valueOf(c.getDonGia()),
-                        String.valueOf(c.getThanhTien()),
-                        c.getMaNhaCungCap(),
-                        c.getNgayNhap()));
+                        String.valueOf(c.getThanhTien())));
                 bw.newLine();
             }
         } catch (IOException e) {
@@ -39,32 +34,35 @@ public class ChiTietPhieuNhapHangServiceImpl implements ChiTietPhieuNhapHangServ
 
     private void docDuLieuTuFile() {
         danhSachChiTiet.clear();
-        try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH))) {
+        File file = new File(FILE_PATH);
+        if (!file.exists())
+            return;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split("\\|");
-                if (parts.length >= 8) {
+                if (parts.length >= 6) {
                     ChiTietPhieuNhapHang ct = new ChiTietPhieuNhapHang(
-                            parts[0], parts[1], parts[2],
+                            parts[0],
+                            parts[1],
+                            parts[2],
                             Integer.parseInt(parts[3]),
                             Double.parseDouble(parts[4]),
-                            Double.parseDouble(parts[5]),
-                            parts[6], parts[7]);
+                            Double.parseDouble(parts[5]));
                     danhSachChiTiet.add(ct);
                 }
             }
         } catch (IOException e) {
-            System.out.println("File ChiTietPhieuNhapHang chưa tồn tại hoặc lỗi đọc file.");
+            System.out.println("Lỗi đọc file ChiTietPhieuNhapHang: " + e.getMessage());
         }
     }
 
-    // ==========================
-    // 2️⃣ CRUD cơ bản
-    // ==========================
     @Override
     public boolean taoChiTietPhieuNhapHang(ChiTietPhieuNhapHang chiTiet) {
         if (chiTiet == null || timChiTietPhieuNhapHangTheoMa(chiTiet.getMaCTPNH()) != null)
             return false;
+        chiTiet.tinhThanhTien();
         danhSachChiTiet.add(chiTiet);
         luuDuLieuRaFile();
         return true;
@@ -87,6 +85,7 @@ public class ChiTietPhieuNhapHangServiceImpl implements ChiTietPhieuNhapHangServ
     public boolean capNhatChiTietPhieuNhapHang(ChiTietPhieuNhapHang chiTiet) {
         for (int i = 0; i < danhSachChiTiet.size(); i++) {
             if (danhSachChiTiet.get(i).getMaCTPNH().equalsIgnoreCase(chiTiet.getMaCTPNH())) {
+                chiTiet.tinhThanhTien();
                 danhSachChiTiet.set(i, chiTiet);
                 luuDuLieuRaFile();
                 return true;
@@ -104,88 +103,69 @@ public class ChiTietPhieuNhapHangServiceImpl implements ChiTietPhieuNhapHangServ
     }
 
     @Override
-    public boolean xoaChiTietPhieuNhapHangTheoMaPhieuNhapHang(String maPhieuNhapHang) {
-        boolean removed = danhSachChiTiet.removeIf(c -> c.getMaPhieuNhapHang().equalsIgnoreCase(maPhieuNhapHang));
+    public boolean xoaChiTietPhieuNhapHangTheoMaPhieuNhapHang(String maPhieuNhap) {
+        boolean removed = danhSachChiTiet.removeIf(c -> c.getMaPhieuNhap().equalsIgnoreCase(maPhieuNhap));
         if (removed)
             luuDuLieuRaFile();
         return removed;
     }
 
-    // ==========================
-    // 3️⃣ Tìm kiếm
-    // ==========================
     @Override
-    public List<ChiTietPhieuNhapHang> timKiemChiTietPhieuNhapHangTheoMaPhieuNhapHang(String maPhieuNhapHang) {
+    public List<ChiTietPhieuNhapHang> timKiemChiTietPhieuNhapHangTheoMaMay(String maMay) {
         return danhSachChiTiet.stream()
-                .filter(c -> c.getMaPhieuNhapHang().equalsIgnoreCase(maPhieuNhapHang))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<ChiTietPhieuNhapHang> timKiemChiTietPhieuNhapHangTheoMaSanPham(String maSanPham) {
-        return danhSachChiTiet.stream()
-                .filter(c -> c.getMaSanPham().equalsIgnoreCase(maSanPham))
+                .filter(c -> c.getMaMay().equalsIgnoreCase(maMay))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<ChiTietPhieuNhapHang> timKiemChiTietPhieuNhapHang(String tuKhoa) {
+        String keyword = tuKhoa.toLowerCase();
         return danhSachChiTiet.stream()
-                .filter(c -> c.getMaCTPNH().toLowerCase().contains(tuKhoa.toLowerCase())
-                        || c.getMaSanPham().toLowerCase().contains(tuKhoa.toLowerCase())
-                        || c.getMaPhieuNhapHang().toLowerCase().contains(tuKhoa.toLowerCase())
-                        || c.getMaNhaCungCap().toLowerCase().contains(tuKhoa.toLowerCase()))
+                .filter(c -> c.getMaCTPNH().toLowerCase().contains(keyword)
+                        || c.getMaPhieuNhap().toLowerCase().contains(keyword)
+                        || c.getMaMay().toLowerCase().contains(keyword))
                 .collect(Collectors.toList());
     }
 
-    // ==========================
-    // 4️⃣ Kiểm tra ràng buộc
-    // ==========================
     @Override
-    public boolean kiemTraRangBuocMaSanPham(String maSanPham) {
-        return danhSachChiTiet.stream().anyMatch(c -> c.getMaSanPham().equalsIgnoreCase(maSanPham));
+    public boolean kiemTraRangBuocMaSanPham(String maMay) {
+        return danhSachChiTiet.stream().anyMatch(c -> c.getMaMay().equalsIgnoreCase(maMay));
     }
 
     @Override
-    public boolean kiemTraRangBuocMaPhieuNhapHang(String maPhieuNhapHang) {
-        return danhSachChiTiet.stream().anyMatch(c -> c.getMaPhieuNhapHang().equalsIgnoreCase(maPhieuNhapHang));
+    public boolean kiemTraRangBuocMaPhieuNhapHang(String maPhieuNhap) {
+        return danhSachChiTiet.stream().anyMatch(c -> c.getMaPhieuNhap().equalsIgnoreCase(maPhieuNhap));
     }
 
-    // ==========================
-    // 5️⃣ Tính toán & thống kê
-    // ==========================
     @Override
-    public Double tinhTongTienChiTietPhieuNhapHangTheoMaPhieuNhapHang(String maPhieuNhapHang) {
+    public Double tinhTongTienChiTietPhieuNhapHangTheoMaPhieuNhapHang(String maPhieuNhap) {
         return danhSachChiTiet.stream()
-                .filter(c -> c.getMaPhieuNhapHang().equalsIgnoreCase(maPhieuNhapHang))
-                .mapToDouble(ChiTietPhieuNhapHang::getThanhTien)
-                .sum();
-    }
-
-    @Override
-    public Double tinhTongTienChiTietPhieuNhapHangTheoNhaCungCap(String maNhaCungCap) {
-        return danhSachChiTiet.stream()
-                .filter(c -> c.getMaNhaCungCap().equalsIgnoreCase(maNhaCungCap))
-                .mapToDouble(ChiTietPhieuNhapHang::getThanhTien)
-                .sum();
-    }
-
-    @Override
-    public Double thongKeTongTienChiTietPhieuNhapHangTheoKhoangThoiGian(String tuNgay, String denNgay) {
-        return danhSachChiTiet.stream()
-                .filter(c -> c.getNgayNhap().compareTo(tuNgay) >= 0 && c.getNgayNhap().compareTo(denNgay) <= 0)
+                .filter(c -> c.getMaPhieuNhap().equalsIgnoreCase(maPhieuNhap))
                 .mapToDouble(ChiTietPhieuNhapHang::getThanhTien)
                 .sum();
     }
 
     @Override
     public List<ChiTietPhieuNhapHang> thongKeChiTietPhieuNhapHangTheoSanPham() {
-        // Trả về danh sách nhóm theo sản phẩm
-        return new ArrayList<>(danhSachChiTiet);
-    }
+        Map<String, ChiTietPhieuNhapHang> thongKe = new HashMap<>();
 
-    @Override
-    public List<ChiTietPhieuNhapHang> thongKeChiTietPhieuNhapHangTheoNhaCungCap() {
-        return new ArrayList<>(danhSachChiTiet);
+        for (ChiTietPhieuNhapHang ct : danhSachChiTiet) {
+            ChiTietPhieuNhapHang tong = thongKe.get(ct.getMaMay());
+            if (tong == null) {
+                tong = new ChiTietPhieuNhapHang(
+                        "TK_" + ct.getMaMay(),
+                        "THONGKE",
+                        ct.getMaMay(),
+                        ct.getSoLuong(),
+                        ct.getDonGia(),
+                        ct.getThanhTien());
+            } else {
+                tong.setSoLuong(tong.getSoLuong() + ct.getSoLuong());
+                tong.setThanhTien(tong.getThanhTien() + ct.getThanhTien());
+            }
+            thongKe.put(ct.getMaMay(), tong);
+        }
+
+        return new ArrayList<>(thongKe.values());
     }
 }

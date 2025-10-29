@@ -51,6 +51,20 @@ public class NhaCungCapServiceImpl implements NhaCungCapService {
     }
 
     // ==========================
+    // 🔹 6. Tìm theo tên
+    // ==========================
+    @Override
+    public List<NhaCungCap> timKiemNhaCungCapTheoTen(String tenNCC) {
+        List<NhaCungCap> ketQua = new ArrayList<>();
+        for (NhaCungCap ncc : danhSachNCC) {
+            if (ncc.getTenNCC().toLowerCase().contains(tenNCC.toLowerCase())) {
+                ketQua.add(ncc);
+            }
+        }
+        return ketQua;
+    }
+
+    // ==========================
     // 🔹 4. Cập nhật
     // ==========================
     @Override
@@ -83,20 +97,6 @@ public class NhaCungCapServiceImpl implements NhaCungCapService {
     }
 
     // ==========================
-    // 🔹 6. Tìm theo tên
-    // ==========================
-    @Override
-    public List<NhaCungCap> timKiemNhaCungCapTheoTen(String tenNCC) {
-        List<NhaCungCap> ketQua = new ArrayList<>();
-        for (NhaCungCap ncc : danhSachNCC) {
-            if (ncc.getTenNCC().toLowerCase().contains(tenNCC.toLowerCase())) {
-                ketQua.add(ncc);
-            }
-        }
-        return ketQua;
-    }
-
-    // ==========================
     // 🔹 7. Sinh mã tự động
     // ==========================
     private String taoMaTuDong() {
@@ -118,7 +118,7 @@ public class NhaCungCapServiceImpl implements NhaCungCapService {
                 writer.newLine();
             }
         } catch (IOException e) {
-            System.err.println("❌ Lỗi khi lưu dữ liệu nhà cung cấp: " + e.getMessage());
+            System.err.println(" Lỗi khi lưu dữ liệu nhà cung cấp: " + e.getMessage());
         }
     }
 
@@ -138,7 +138,7 @@ public class NhaCungCapServiceImpl implements NhaCungCapService {
                 if (parts.length >= 5) {
                     NhaCungCap ncc = new NhaCungCap(
                             parts[0], // ma
-                            parts[1], // hang
+                            parts[1], // hangsx
                             parts[3], // ten
                             parts[4], // nguoi dai dien
                             parts[5], // dia chi
@@ -158,7 +158,7 @@ public class NhaCungCapServiceImpl implements NhaCungCapService {
                 }
             }
         } catch (IOException e) {
-            System.err.println("❌ Lỗi khi đọc dữ liệu nhà cung cấp: " + e.getMessage());
+            System.err.println("Lỗi khi đọc dữ liệu nhà cung cấp: " + e.getMessage());
         }
     }
 }

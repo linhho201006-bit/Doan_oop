@@ -1,0 +1,5 @@
+KH001 | Nguyễn Văn An | Hà Nội | 0905123456 | an@gmail.com
+KH002 | Lê Thị Bích | TP.HCM | 0912456789 | bich@gmail.com
+KH003 | Phạm Văn Cường | Đà Nẵng | 0988776655 | cuong@gmail.com
+KH004 | Trần Hồng Dung | Hải Phòng | 0933344556 | dung@gmail.com
+KH005 | Vũ Hoàng Anh | Cần Thơ | 0945566778 | anh@gmail.com

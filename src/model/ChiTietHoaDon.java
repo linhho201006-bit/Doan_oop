@@ -90,8 +90,8 @@ public class ChiTietHoaDon {
 
     @Override
     public String toString() {
-        return "ChiTietHoaDon[Ma CTHD: " + maCTHD + " Ma HD: " + maHD +
-                " Ma SP: " + maMay + ",Ma KH: " + maKH + " Don Gia: " + donGia +
-                " So Luong: " + soLuong + " Thanh Tien: " + thanhTien + "]";
+        return "ChiTietHoaDon[Ma CTHD: " + maCTHD + ", Ma HD: " + maHD +
+                ", Ma may: " + maMay + ", Ma KH: " + maKH + " Don Gia: " + donGia +
+                ", So luong: " + soLuong + ", Thanh tien: " + thanhTien + "]";
     }
 }

@@ -12,14 +12,11 @@ public interface ChiTietHoaDonService {
     // Lấy tất cả chi tiết hóa đơn
     List<ChiTietHoaDon> layTatCaChiTietHoaDon();
 
-    // Lấy chi tiết hóa đơn theo mã
-    ChiTietHoaDon timChiTietHoaDonTheoMa(String maChiTietHoaDon);
+    // Tìm chi tiết hóa đơn theo mã
+    ChiTietHoaDon timChiTietHoaDonTheoMa(String maCTHD);
 
-    // Lấy chi tiết hóa đơn theo mã hóa đơn
-    List<ChiTietHoaDon> timChiTietHoaDonTheoMaHoaDon(String maHoaDon);
-
-    // Lấy chi tiết hóa đơn theo mã khách hàng
-    List<ChiTietHoaDon> timChiTietHoaDonTheoMaKhachHang(String maKhachHang);
+    // Tìm chi tiết hóa đơn theo mã khách hàng
+    List<ChiTietHoaDon> timChiTietHoaDonTheoMaKhachHang(String maKH);
 
     // Tìm kiếm tổng hợp
     List<ChiTietHoaDon> timKiemChiTietHoaDon(String tuKhoa);
@@ -30,8 +27,8 @@ public interface ChiTietHoaDonService {
     // Xóa chi tiết hóa đơn
     boolean xoaChiTietHoaDon(String maChiTietHoaDon);
 
-    // Xóa tất cả chi tiết hóa đơn của một hóa đơn
-    boolean xoaTatCaChiTietHoaDonTheoMaHoaDon(String maHoaDon);
+    // Xóa chi tiết hóa đơn theo mã hóa đơn
+    boolean xoaTatCaChiTietHoaDonTheoMaHoaDon(String maHD);
 
     // Kiểm tra ràng buộc: mã hóa đơn phải tồn tại
     boolean kiemTraRangBuocHoaDon(String maHoaDon);
@@ -44,18 +41,6 @@ public interface ChiTietHoaDonService {
 
     // Tính tổng tiền theo khách hàng
     Double tinhTongTienTheoKhachHang(String maKhachHang);
-
-    // Đếm số lượng chi tiết hóa đơn của một hóa đơn
-    int demSoChiTietHoaDonTheoMaHoaDon(String maHoaDon);
-
-    // Lấy chi tiết hóa đơn có thành tiền cao nhất
-    ChiTietHoaDon layChiTietHoaDonCoThanhTienCaoNhat();
-
-    // Lấy chi tiết hóa đơn có thành tiền thấp nhất
-    ChiTietHoaDon layChiTietHoaDonCoThanhTienThapNhat();
-
-    // Tính thành tiền trung bình
-    Double tinhThanhTienTrungBinh();
 
     // Thống kê chi tiết hóa đơn theo khách hàng
     List<ChiTietHoaDon> thongKeChiTietHoaDonTheoKhachHang();

@@ -101,9 +101,8 @@ public class ChiTietPhieuNhapHangController {
     private void timKiemChiTietPhieuNhapHang() {
         System.out.println("\n=== TÌM KIẾM CHI TIẾT PHIẾU NHẬP HÀNG ===");
         System.out.println("1. Theo mã chi tiết phiếu nhập hàng");
-        System.out.println("2. Theo mã phiếu nhập hàng");
-        System.out.println("3. Theo mã máy");
-        System.out.println("4. Tìm kiếm tổng hợp");
+        System.out.println("2. Theo mã máy");
+        System.out.println("3. Tìm kiếm tổng hợp");
         System.out.print("Chọn: ");
 
         int chon = scanner.nextInt();
@@ -120,29 +119,20 @@ public class ChiTietPhieuNhapHangController {
                     System.out.println(" Không tìm thấy!");
             }
             case 2 -> {
-                System.out.print("Nhập mã phiếu nhập hàng: ");
-                String maPNH = scanner.nextLine();
-                List<ChiTietPhieuNhapHang> ds = chiTietService.timKiemChiTietPhieuNhapHangTheoMaPhieuNhapHang(maPNH);
+                System.out.print("Nhập mã máy: ");
+                String maMay = scanner.nextLine();
+                List<ChiTietPhieuNhapHang> ds = chiTietService.timKiemChiTietPhieuNhapHangTheoMaMay(maMay);
                 if (ds.isEmpty())
-                    System.out.println("❌ Không tìm thấy!");
+                    System.out.println(" Không tìm thấy!");
                 else
                     ds.forEach(this::hienThiThongTinChiTiet);
             }
             case 3 -> {
-                System.out.print("Nhập mã máy: ");
-                String maMay = scanner.nextLine();
-                List<ChiTietPhieuNhapHang> ds = chiTietService.timKiemChiTietPhieuNhapHangTheoMaSanPham(maMay);
-                if (ds.isEmpty())
-                    System.out.println("❌ Không tìm thấy!");
-                else
-                    ds.forEach(this::hienThiThongTinChiTiet);
-            }
-            case 4 -> {
                 System.out.print("Nhập từ khóa: ");
                 String tuKhoa = scanner.nextLine();
                 List<ChiTietPhieuNhapHang> ds = chiTietService.timKiemChiTietPhieuNhapHang(tuKhoa);
                 if (ds.isEmpty())
-                    System.out.println("❌ Không tìm thấy!");
+                    System.out.println(" Không tìm thấy!");
                 else
                     ds.forEach(this::hienThiThongTinChiTiet);
             }
@@ -197,7 +187,6 @@ public class ChiTietPhieuNhapHangController {
     private void thongKeChiTietPhieuNhapHang() {
         System.out.println("\n=== THỐNG KÊ CHI TIẾT PHIẾU NHẬP HÀNG ===");
         System.out.println("1. Theo sản phẩm");
-        System.out.println("2. Theo nhà cung cấp");
         System.out.print("Chọn: ");
         int chon = scanner.nextInt();
         scanner.nextLine();
@@ -205,13 +194,6 @@ public class ChiTietPhieuNhapHangController {
         switch (chon) {
             case 1 -> {
                 List<ChiTietPhieuNhapHang> ds = chiTietService.thongKeChiTietPhieuNhapHangTheoSanPham();
-                if (ds.isEmpty())
-                    System.out.println("Không có dữ liệu!");
-                else
-                    ds.forEach(this::hienThiThongTinChiTiet);
-            }
-            case 2 -> {
-                List<ChiTietPhieuNhapHang> ds = chiTietService.thongKeChiTietPhieuNhapHangTheoNhaCungCap();
                 if (ds.isEmpty())
                     System.out.println("Không có dữ liệu!");
                 else

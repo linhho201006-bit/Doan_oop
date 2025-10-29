@@ -92,7 +92,7 @@ public class NhaCungCapController {
 
         for (NhaCungCap ncc : ds) {
             System.out.printf("%-10s %-20s %-15s %-20s %-25s %-15s %-25s%n",
-                    ncc.getMaNCC(), ncc.getTenNCC(), ncc.getHang(),
+                    ncc.getMaNCC(), ncc.getTenNCC(), ncc.getHangSX(),
                     ncc.getNguoiDaiDien(), ncc.getDiaChi(),
                     ncc.getSoDienThoai(), ncc.getEmail());
         }
@@ -150,10 +150,10 @@ public class NhaCungCapController {
         if (!ten.isEmpty())
             ncc.setTenNCC(ten);
 
-        System.out.print("Hãng (" + ncc.getHang() + "): ");
-        String hang = scanner.nextLine();
-        if (!hang.isEmpty())
-            ncc.setHang(hang);
+        System.out.print("Hãng (" + ncc.getHangSX() + "): ");
+        String hangSX = scanner.nextLine();
+        if (!hangSX.isEmpty())
+            ncc.setHangSX(hangSX);
 
         System.out.print("Người đại diện (" + ncc.getNguoiDaiDien() + "): ");
         String daiDien = scanner.nextLine();
@@ -196,7 +196,7 @@ public class NhaCungCapController {
     // ================= HÀM PHỤ =================
     private void hienThiThongTinNhaCungCap(NhaCungCap ncc) {
         System.out.printf("%-10s %-20s %-15s %-20s %-25s %-15s %-25s%n",
-                ncc.getMaNCC(), ncc.getTenNCC(), ncc.getHang(),
+                ncc.getMaNCC(), ncc.getTenNCC(), ncc.getHangSX(),
                 ncc.getNguoiDaiDien(), ncc.getDiaChi(),
                 ncc.getSoDienThoai(), ncc.getEmail());
     }

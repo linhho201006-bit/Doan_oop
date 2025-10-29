@@ -28,16 +28,14 @@ public class HoaDonServiceImpl implements HoaDonService {
         danhSachHoaDon = new ArrayList<>();
         nextMaHoaDon = 1;
         khachHangService = new service.Impl.KhachHangServiceImpl();
-        chiTietHoaDonService = null; // Sẽ được set sau khi ChiTietHoaDonServiceImpl được tạo
+        chiTietHoaDonService = null;
         loadData();
     }
 
-    // Setter cho ChiTietHoaDonService
     public void setChiTietHoaDonService(ChiTietHoaDonService chiTietHoaDonService) {
         this.chiTietHoaDonService = chiTietHoaDonService;
     }
 
-    // Tạo mã hóa đơn tự động
     private String generateMaHoaDon() {
         return String.format("HD%03d", nextMaHoaDon++);
     }
@@ -45,16 +43,12 @@ public class HoaDonServiceImpl implements HoaDonService {
     @Override
     public boolean taoHoaDon(HoaDon hoaDon) {
         try {
-            // Kiểm tra ràng buộc: mã khách hàng phải tồn tại
             if (!kiemTraRangBuocKhachHang(hoaDon.getMaKH())) {
                 System.out.println("Mã khách hàng không tồn tại: " + hoaDon.getMaKH());
                 return false;
             }
-
-            // Tự động tạo mã hóa đơn
             hoaDon.setMaHD(generateMaHoaDon());
             hoaDon.setTrangThai("Chưa thanh toán");
-
             danhSachHoaDon.add(hoaDon);
             saveData();
             return true;
@@ -87,32 +81,6 @@ public class HoaDonServiceImpl implements HoaDonService {
     }
 
     @Override
-    public List<HoaDon> timHoaDonTheoTrangThai(String trangThai) {
-        return danhSachHoaDon.stream()
-                .filter(hd -> hd.getTrangThai().equalsIgnoreCase(trangThai))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<HoaDon> timHoaDonTheoPhuongThucThanhToan(String phuongThuc) {
-        return danhSachHoaDon.stream()
-                .filter(hd -> hd.getPhuongThucThanhToan() != null &&
-                        hd.getPhuongThucThanhToan().equalsIgnoreCase(phuongThuc))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<HoaDon> timHoaDonTheoKhoangNgay(String ngayBatDau, String ngayKetThuc) {
-        Date ngayBD = Date.valueOf(ngayBatDau);
-        Date ngayKT = Date.valueOf(ngayKetThuc);
-        return danhSachHoaDon.stream()
-                .filter(hd -> hd.getNgayThanhToan() != null &&
-                        !hd.getNgayThanhToan().before(ngayBD) &&
-                        !hd.getNgayThanhToan().after(ngayKT))
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public List<HoaDon> timKiemHoaDon(String tuKhoa) {
         return danhSachHoaDon.stream()
                 .filter(hd -> hd.getMaHD().toLowerCase().contains(tuKhoa.toLowerCase()) ||
@@ -129,14 +97,12 @@ public class HoaDonServiceImpl implements HoaDonService {
         try {
             for (int i = 0; i < danhSachHoaDon.size(); i++) {
                 if (danhSachHoaDon.get(i).getMaHD().equals(hoaDon.getMaHD())) {
-                    // Kiểm tra ràng buộc nếu mã khách hàng thay đổi
                     if (!danhSachHoaDon.get(i).getMaKH().equals(hoaDon.getMaKH())) {
                         if (!kiemTraRangBuocKhachHang(hoaDon.getMaKH())) {
                             System.out.println("Mã khách hàng không tồn tại: " + hoaDon.getMaKH());
                             return false;
                         }
                     }
-
                     danhSachHoaDon.set(i, hoaDon);
                     saveData();
                     return true;
@@ -154,11 +120,9 @@ public class HoaDonServiceImpl implements HoaDonService {
         try {
             for (int i = 0; i < danhSachHoaDon.size(); i++) {
                 if (danhSachHoaDon.get(i).getMaHD().equals(maHD)) {
-                    // Xóa tất cả chi tiết hóa đơn liên quan
                     if (chiTietHoaDonService != null) {
                         chiTietHoaDonService.xoaTatCaChiTietHoaDonTheoMaHoaDon(maHD);
                     }
-
                     danhSachHoaDon.remove(i);
                     saveData();
                     return true;
@@ -179,23 +143,18 @@ public class HoaDonServiceImpl implements HoaDonService {
                 System.out.println("Không tìm thấy hóa đơn với mã: " + maHD);
                 return false;
             }
-
             if (!hoaDon.coTheThanhToan()) {
                 System.out.println("Hóa đơn này không thể thanh toán!");
                 return false;
             }
-
-            // Tính tổng tiền từ chi tiết hóa đơn
             Double tongTien = tinhTongTienHoaDon(maHD);
             if (tongTien == null || tongTien <= 0) {
                 System.out.println("Hóa đơn không có chi tiết hoặc tổng tiền không hợp lệ!");
                 return false;
             }
-
             hoaDon.setTongTien(tongTien);
             hoaDon.setPhuongThucThanhToan(phuongThucThanhToan);
             hoaDon.thanhToanHoaDon();
-
             saveData();
             return true;
         } catch (Exception e) {
@@ -212,12 +171,10 @@ public class HoaDonServiceImpl implements HoaDonService {
                 System.out.println("Không tìm thấy hóa đơn với mã: " + maHD);
                 return false;
             }
-
             if (!hoaDon.coTheHuy()) {
                 System.out.println("Hóa đơn này không thể hủy!");
                 return false;
             }
-
             hoaDon.huyHoaDon();
             saveData();
             return true;
@@ -241,40 +198,8 @@ public class HoaDonServiceImpl implements HoaDonService {
     }
 
     @Override
-    public List<HoaDon> layHoaDonChuaThanhToan() {
-        return timHoaDonTheoTrangThai("Chưa thanh toán");
-    }
-
-    @Override
-    public List<HoaDon> layHoaDonDaThanhToan() {
-        return timHoaDonTheoTrangThai("Đã thanh toán");
-    }
-
-    @Override
-    public List<HoaDon> layHoaDonDaHuy() {
-        return timHoaDonTheoTrangThai("Đã hủy");
-    }
-
-    @Override
     public Double tinhTongDoanhThuHoaDon() {
         return danhSachHoaDon.stream()
-                .filter(hd -> "Đã thanh toán".equals(hd.getTrangThai()))
-                .mapToDouble(hd -> hd.getTongTien() != null ? hd.getTongTien() : 0.0)
-                .sum();
-    }
-
-    @Override
-    public Double tinhTongDoanhThuTheoKhachHang(String maKH) {
-        return danhSachHoaDon.stream()
-                .filter(hd -> hd.getMaKH().equals(maKH))
-                .filter(hd -> "Đã thanh toán".equals(hd.getTrangThai()))
-                .mapToDouble(hd -> hd.getTongTien() != null ? hd.getTongTien() : 0.0)
-                .sum();
-    }
-
-    @Override
-    public Double tinhTongDoanhThuTheoKhoangThoiGian(String ngayBatDau, String ngayKetThuc) {
-        return timHoaDonTheoKhoangNgay(ngayBatDau, ngayKetThuc).stream()
                 .filter(hd -> "Đã thanh toán".equals(hd.getTrangThai()))
                 .mapToDouble(hd -> hd.getTongTien() != null ? hd.getTongTien() : 0.0)
                 .sum();
@@ -285,16 +210,6 @@ public class HoaDonServiceImpl implements HoaDonService {
         return new ArrayList<>(danhSachHoaDon);
     }
 
-    @Override
-    public List<HoaDon> layHoaDonSapHetHanThanhToan() {
-        // Tạm thời trả về danh sách hóa đơn chưa thanh toán
-        // Có thể cải thiện logic này bằng cách thêm trường NgayTaoHoaDon vào model
-        return danhSachHoaDon.stream()
-                .filter(hd -> "Chưa thanh toán".equals(hd.getTrangThai()))
-                .collect(Collectors.toList());
-    }
-
-    // Lưu dữ liệu vào file
     private void saveData() {
         try (PrintWriter writer = new PrintWriter(new FileWriter(FILE_PATH))) {
             for (HoaDon hd : danhSachHoaDon) {
@@ -310,7 +225,6 @@ public class HoaDonServiceImpl implements HoaDonService {
         }
     }
 
-    // Đọc dữ liệu từ file
     private void loadData() {
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
             String line;
@@ -318,16 +232,13 @@ public class HoaDonServiceImpl implements HoaDonService {
                 String[] parts = line.split("\\|");
                 if (parts.length == 6) {
                     HoaDon hd = new HoaDon(
-                            parts[0], // maHoaDon
-                            parts[1], // maKhachHang
-                            parts[2].equals("null") ? null : Date.valueOf(parts[3]), // ngayThanhToan
-                            parts[3].equals("null") ? null : Double.parseDouble(parts[2]), // tienThanhToan
-                            parts[4].equals("null") ? null : parts[4], // phuongThucThanhToan
-                            parts[5] // trangThai
-                    );
+                            parts[0],
+                            parts[1],
+                            parts[2].equals("null") ? null : Date.valueOf(parts[3]),
+                            parts[3].equals("null") ? null : Double.parseDouble(parts[2]),
+                            parts[4].equals("null") ? null : parts[4],
+                            parts[5]);
                     danhSachHoaDon.add(hd);
-
-                    // Cập nhật nextMaHoaDon
                     String maHoaDon = parts[0];
                     if (maHoaDon.startsWith("HD")) {
                         try {
@@ -336,13 +247,11 @@ public class HoaDonServiceImpl implements HoaDonService {
                                 nextMaHoaDon = so + 1;
                             }
                         } catch (NumberFormatException e) {
-                            // Bỏ qua nếu không parse được
                         }
                     }
                 }
             }
         } catch (IOException e) {
-            // File chưa tồn tại hoặc lỗi đọc file, tạo mới
             try {
                 new File(FILE_PATH).createNewFile();
             } catch (IOException ex) {

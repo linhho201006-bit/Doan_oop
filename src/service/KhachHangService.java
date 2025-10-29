@@ -15,13 +15,7 @@ public interface KhachHangService {
     KhachHang timKhachHangTheoMa(String maKH);
 
     // Tìm khách hàng theo họ tên
-    List<KhachHang> timKhachHangTheoHoTen(String hoTen);
-
-    // Tìm khách hàng theo CMND
-    List<KhachHang> timKhachHangTheoCMND(String CMND);
-
-    // Tìm khách hàng theo SĐT
-    List<KhachHang> timKhachHangTheoSDT(String SDT);
+    List<KhachHang> timKhachHangTheoHoTen(String tenKH);
 
     // Tìm kiếm tổng hợp
     List<KhachHang> timKiemKhachHang(String tuKhoa);

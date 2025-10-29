@@ -1,0 +1,5 @@
+NV001 | Nguyễn Văn Nam | 1995-05-15 | Nam | Hà Nội | Nhân viên | 123456789 | 0909988776 | nam@gmail.com | 15000000
+NV002 | Trần Thị Hoa | 1998-09-20 | Nữ | TP.HCM | Quản lý | 234567890 | 0908877665 | hoa@gmail.com | 18000000
+NV003 | Lê Văn Long | 1993-03-10 | Nam | Đà Nẵng | Nhân viên | 345678901 | 0907766554 | long@gmail.com | 14000000
+NV004 | Phạm Thị Hà | 1996-07-25 | Nữ | Cần Thơ | Kế toán | 456789012 | 0906655443 | ha@gmail.com | 16000000
+NV005 | Vũ Văn Quang | 1992-02-12 | Nam | Hải Phòng | Nhân viên | 567890123 | 0905544332 | quang@gmail.com | 14500000

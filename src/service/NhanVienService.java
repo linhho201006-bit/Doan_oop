@@ -13,16 +13,10 @@ public interface NhanVienService {
     List<NhanVien> layTatCaNhanVien();
 
     // Tìm nhân viên theo mã
-    NhanVien timNhanVienTheoMa(String maKH);
+    NhanVien timNhanVienTheoMa(String maNV);
 
     // Tìm nhân viên theo họ tên
-    List<NhanVien> timNhanVienTheoHoTen(String hoTen);
-
-    // Tìm nhân viên theo CMND
-    List<NhanVien> timNhanVienTheoCMND(String CMND);
-
-    // Tìm nhân viên theo SĐT
-    List<NhanVien> timNhanVienTheoSDT(String SDT);
+    List<NhanVien> timNhanVienTheoHoTen(String tenNV);
 
     // Tìm kiếm tổng hợp
     List<NhanVien> timKiemNhanVien(String tuKhoa);
@@ -32,5 +26,6 @@ public interface NhanVienService {
 
     // Xóa nhân viên
     boolean xoaNhanVien(String maNV);
+
 
 }

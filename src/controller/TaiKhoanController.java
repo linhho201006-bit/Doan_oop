@@ -35,18 +35,18 @@ public class TaiKhoanController {
             scanner.nextLine();
 
             switch (choice) {
-                case 1 -> themTaiKhoan();
-                case 2 -> hienThiTatCaTaiKhoan();
-                case 3 -> timKiemTaiKhoan();
-                case 4 -> capNhatTaiKhoan();
-                case 5 -> xoaTaiKhoan();
-                case 6 -> doiMatKhau();
-                case 7 -> thongKeTaiKhoan();
-                case 0 -> {
+                case 1: themTaiKhoan();
+                case 2: hienThiTatCaTaiKhoan();
+                case 3: timKiemTaiKhoan();
+                case 4: capNhatTaiKhoan();
+                case 5: xoaTaiKhoan();
+                case 6: doiMatKhau();
+                case 7: thongKeTaiKhoan();
+                case 0: {
                     System.out.println("Cảm ơn bạn đã sử dụng chương trình!");
                     return;
                 }
-                default -> System.out.println("Lựa chọn không hợp lệ!");
+                default: System.out.println("Lựa chọn không hợp lệ!");
             }
         }
     }
@@ -115,7 +115,6 @@ public class TaiKhoanController {
         System.out.println("\n=== TÌM KIẾM TÀI KHOẢN ===");
         System.out.println("1. Theo tên đăng nhập");
         System.out.println("2. Theo mã nhân viên");
-        System.out.println("3. Theo vai trò");
         System.out.print("Chọn loại tìm kiếm: ");
 
         int choice = scanner.nextInt();
@@ -139,15 +138,6 @@ public class TaiKhoanController {
                     hienThiThongTinTaiKhoan(tk);
                 else
                     System.out.println("Không tìm thấy!");
-            }
-            case 3 -> {
-                System.out.print("Nhập vai trò: ");
-                String vaiTro = scanner.nextLine();
-                List<TaiKhoan> ds = taiKhoanService.timKiemTaiKhoanTheoVaiTro(vaiTro);
-                if (ds.isEmpty())
-                    System.out.println("Không có tài khoản nào!");
-                else
-                    ds.forEach(this::hienThiThongTinTaiKhoan);
             }
             default -> System.out.println("Lựa chọn không hợp lệ!");
         }

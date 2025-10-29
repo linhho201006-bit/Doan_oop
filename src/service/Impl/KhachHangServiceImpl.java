@@ -48,9 +48,9 @@ public class KhachHangServiceImpl implements KhachHangService {
     }
 
     @Override
-    public KhachHang timKhachHangTheoMa(String maKh) {
+    public KhachHang timKhachHangTheoMa(String maKH) {
         for (KhachHang kh : danhSachKhachHang) {
-            if (kh.getMaKH().equals(maKh)) {
+            if (kh.getMaKH().equals(maKH)) {
                 return kh;
             }
         }
@@ -58,32 +58,10 @@ public class KhachHangServiceImpl implements KhachHangService {
     }
 
     @Override
-    public List<KhachHang> timKhachHangTheoHoTen(String hoTen) {
+    public List<KhachHang> timKhachHangTheoHoTen(String tenKH) {
         List<KhachHang> ketQua = new ArrayList<>();
         for (KhachHang kh : danhSachKhachHang) {
-            if (kh.getHoTen().toLowerCase().contains(hoTen.toLowerCase())) {
-                ketQua.add(kh);
-            }
-        }
-        return ketQua;
-    }
-
-    @Override
-    public List<KhachHang> timKhachHangTheoCMND(String cmnd) {
-        List<KhachHang> ketQua = new ArrayList<>();
-        for (KhachHang kh : danhSachKhachHang) {
-            if (kh.getCMND().contains(cmnd)) {
-                ketQua.add(kh);
-            }
-        }
-        return ketQua;
-    }
-
-    @Override
-    public List<KhachHang> timKhachHangTheoSDT(String sdt) {
-        List<KhachHang> ketQua = new ArrayList<>();
-        for (KhachHang kh : danhSachKhachHang) {
-            if (kh.getSDT().contains(sdt)) {
+            if (kh.getTenKH().toLowerCase().contains(tenKH.toLowerCase())) {
                 ketQua.add(kh);
             }
         }
@@ -95,9 +73,9 @@ public class KhachHangServiceImpl implements KhachHangService {
         List<KhachHang> ketQua = new ArrayList<>();
         for (KhachHang kh : danhSachKhachHang) {
             if (kh.getMaKH().toLowerCase().contains(tuKhoa.toLowerCase()) ||
-                    kh.getHoTen().toLowerCase().contains(tuKhoa.toLowerCase()) ||
+                    kh.getTenKH().toLowerCase().contains(tuKhoa.toLowerCase()) ||
                     kh.getCMND().contains(tuKhoa) ||
-                    kh.getSDT().contains(tuKhoa)) {
+                    kh.getSoDienThoai().contains(tuKhoa)) {
                 ketQua.add(kh);
             }
         }
@@ -143,12 +121,12 @@ public class KhachHangServiceImpl implements KhachHangService {
         try (PrintWriter writer = new PrintWriter(new FileWriter(FILE_PATH))) {
             for (KhachHang kh : danhSachKhachHang) {
                 writer.println(kh.getMaKH() + "|" +
-                        kh.getHoTen() + "|" +
+                        kh.getTenKH() + "|" +
                         kh.getNgaySinh() + "|" +
                         kh.getGioiTinh() + "|" +
                         kh.getDiaChi() + "|" +
                         kh.getCMND() + "|" +
-                        kh.getSDT());
+                        kh.getSoDienThoai());
             }
         } catch (IOException e) {
             e.printStackTrace();

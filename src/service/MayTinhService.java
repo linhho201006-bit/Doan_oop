@@ -32,23 +32,14 @@ public interface MayTinhService {
     // Tìm Kiếm máy tính theo tên
     List<MayTinh> timKiemMayTinhTheoTen(String tenMay);
 
-    // Tìm kiếm máy tính theo khoảng giá
-    List<MayTinh> timKiemMayTinhTheoKhoangGia(double giaMin, double giaMax);
-
     // Tìm kiếm máy tính theo hãng sản xuất
     List<MayTinh> timKiemMayTinhTheoHangSX(String hangSX);
 
     // Tìm pc theo dung lượng ram
     List<PC> timKiemPCTheoRam(int ram);
 
-    // Tìm pc theo loại CPU
-    List<PC> timKiemPCTheoLoaiCPU(String loaiCPU);
-
     // Tìm kiếm laptop theo trọng lượng
     List<LapTop> timKiemLapTopTheoTrongLuong(double trongLuong);
-
-    // Tìm laptop theo kích thước màn hình
-    List<LapTop> timKiemLapTopTheoKichThuocManHinh(double kichThuocManHinh);
 
     // Tìm kiếm tổng hợp máy tính
     List<MayTinh> timKiemTongHop(String tuKhoa);

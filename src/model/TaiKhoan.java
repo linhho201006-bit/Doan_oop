@@ -1,12 +1,13 @@
 package model;
 
 public class TaiKhoan {
-    private String tenDangNhap;   // Tên đăng nhập
-    private String matKhau;       // Mật khẩu
-    private String vaiTro;        // Vai trò (admin, nhanvien, quanly,...)
-    private String maNV;          // Liên kết đến nhân viên (nếu là nhân viên)
+    private String tenDangNhap; // Tên đăng nhập
+    private String matKhau; // Mật khẩu
+    private String vaiTro; // Vai trò (admin, nhanvien, quanly,...)
+    private String maNV; // Liên kết đến nhân viên (nếu là nhân viên)
 
-    public TaiKhoan() {}
+    public TaiKhoan() {
+    }
 
     public TaiKhoan(String tenDangNhap, String matKhau, String vaiTro, String maNV) {
         this.tenDangNhap = tenDangNhap;
@@ -50,9 +51,7 @@ public class TaiKhoan {
 
     @Override
     public String toString() {
-        return "TaiKhoan [Tendangnhap:" + tenDangNhap +", Vaitro:" + vaiTro + 
-                ", Manhanvien:" + maNV + "]";
+        return "TaiKhoan [Ten dang nhap:" + tenDangNhap + ", Vai tro:" + vaiTro +
+                ", Mat khau:" + matKhau + ", Ma NV:" + maNV + "]";
     }
 }
-
-

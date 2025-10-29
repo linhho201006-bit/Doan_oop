@@ -1,0 +1,5 @@
+NCC001 | Dell | Dell Việt Nam | Nguyễn Văn Long | Hà Nội | 0909998888 | dellvn@gmail.com
+NCC002 | Asus | Asus Việt Nam | Lê Minh Hưng | TP.HCM | 0911234567 | asusvn@gmail.com
+NCC003 | HP | HP Việt Nam | Phạm Ngọc Hân | Đà Nẵng | 0987766554 | hpvn@gmail.com
+NCC004 | Acer | Acer Việt Nam | Trần Quốc Tuấn | Cần Thơ | 0977001122 | acervn@gmail.com
+NCC005 | Lenovo | Lenovo Việt Nam | Vũ Hữu Tài | Hải Phòng | 0965554433 | lenovovn@gmail.com

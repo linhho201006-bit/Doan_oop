@@ -4,7 +4,7 @@ import java.sql.Date;
 
 public class PhieuNhapHang {
     private String maPhieuNhap;
-    private String maNhaCungCap;
+    private String maNCC;
     private Date ngayNhap;
     private Date ngayThanhToan;// Ngày thanh toán bằng null nếu chưa thanh toán
     private Double tongTien;
@@ -14,10 +14,10 @@ public class PhieuNhapHang {
     public PhieuNhapHang() {
     }
 
-    public PhieuNhapHang(String maPhieuNhap, String maNhaCungCap, Date ngayNhap, Date ngayThanhToan,
+    public PhieuNhapHang(String maPhieuNhap, String maNCC, Date ngayNhap, Date ngayThanhToan,
             String phuongThucThanhToan, String trangThai, Double tongTien) {
         this.maPhieuNhap = maPhieuNhap;
-        this.maNhaCungCap = maNhaCungCap;
+        this.maNCC = maNCC;
         this.ngayNhap = ngayNhap;
         this.ngayThanhToan = ngayThanhToan;
         this.phuongThucThanhToan = phuongThucThanhToan;
@@ -30,8 +30,8 @@ public class PhieuNhapHang {
         return maPhieuNhap;
     }
 
-    public String getMaNhaCungCap() {
-        return maNhaCungCap;
+    public String getMaNCC() {
+        return maNCC;
     }
 
     public Date getNgayNhap() {
@@ -58,8 +58,8 @@ public class PhieuNhapHang {
         this.maPhieuNhap = maPhieuNhap;
     }
 
-    public void setMaNhaCungCap(String maNhaCungCap) {
-        this.maNhaCungCap = maNhaCungCap;
+    public void setMaNCC(String maNCC) {
+        this.maNCC = maNCC;
     }
 
     public void setNgayNhap(Date ngayNhap) {
@@ -109,9 +109,10 @@ public class PhieuNhapHang {
 
     @Override
     public String toString() {
-        return "PhieuNhapHang [maPhieuNhap:" + maPhieuNhap + ", maNhaCungCap:" + maNhaCungCap +
-                ", ngayNhap:" + ngayNhap + ", ngayThanhToan:" + ngayThanhToan +
-                ", phuongThucThanhToan:" + phuongThucThanhToan + ", trangThai:" + trangThai + ", tongTien:" + tongTien
+        return "PhieuNhapHang [Ma phieu nhap:" + maPhieuNhap + ", Ma NCC:" + maNCC +
+                ", Ngay nhap:" + ngayNhap + ", Ngay thanh toan:" + ngayThanhToan +
+                ", Phuong thuc thanh toan:" + phuongThucThanhToan + ", Trang thai:" + trangThai + ", Tong tien:"
+                + tongTien
                 + "]";
     }
 

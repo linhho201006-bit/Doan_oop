@@ -63,13 +63,15 @@ public class MayTinhController {
         System.out.print("Nhập giá: ");
         double gia = scanner.nextDouble();
         scanner.nextLine();
+        System.out.print("Nhập nhà cung cấp: ");
+        String maNCC = scanner.nextLine();
         System.out.print("Nhập dung lượng RAM (GB): ");
         int ram = scanner.nextInt();
         scanner.nextLine();
         System.out.print("Nhập loại CPU: ");
         String loaiCPU = scanner.nextLine();
 
-        PC pc = new PC("", tenMay, hangSX, gia, ram, loaiCPU);
+        PC pc = new PC("", tenMay, hangSX, gia, maNCC, ram, loaiCPU);
         if (mayTinhService.themPC(pc)) {
             System.out.println("Thêm PC thành công! Mã: " + pc.getMaMay());
         } else {
@@ -87,13 +89,15 @@ public class MayTinhController {
         System.out.print("Nhập giá: ");
         double gia = scanner.nextDouble();
         scanner.nextLine();
-        System.out.print("Nhập loại pin: ");
+        System.out.print("Nhập nhà cung cấp: ");
+        String maNCC = scanner.nextLine();
+        System.out.print("Nhập trọng lượng: ");
         double trongLuong = scanner.nextDouble();
         System.out.print("Nhập kích thước màn hình (inch): ");
         double kichThuocManHinh = scanner.nextDouble();
         scanner.nextLine();
 
-        LapTop laptop = new LapTop("", tenMay, hangSX, gia, trongLuong, kichThuocManHinh);
+        LapTop laptop = new LapTop("", tenMay, hangSX, gia, maNCC, trongLuong, kichThuocManHinh);
         if (mayTinhService.themLapTop(laptop)) {
             System.out.println("Thêm Laptop thành công! Mã: " + laptop.getMaMay());
         } else {
@@ -159,14 +163,6 @@ public class MayTinhController {
                 String ten = scanner.nextLine();
                 kq = mayTinhService.timKiemMayTinhTheoTen(ten);
             }
-            case 2 -> {
-                System.out.print("Giá thấp nhất: ");
-                double min = scanner.nextDouble();
-                System.out.print("Giá cao nhất: ");
-                double max = scanner.nextDouble();
-                scanner.nextLine();
-                kq = mayTinhService.timKiemMayTinhTheoKhoangGia(min, max);
-            }
             case 3 -> {
                 System.out.print("Nhập hãng sản xuất: ");
                 String hang = scanner.nextLine();
@@ -179,23 +175,10 @@ public class MayTinhController {
                 hienThiPC(mayTinhService.timKiemPCTheoRam(ram));
                 return;
             }
-            case 5 -> {
-                System.out.print("Nhập loại CPU: ");
-                String cpu = scanner.nextLine();
-                hienThiPC(mayTinhService.timKiemPCTheoLoaiCPU(cpu));
-                return;
-            }
             case 6 -> {
                 System.out.print("Nhập trọng lượng: ");
                 Double trongLuong = scanner.nextDouble();
                 hienThiLapTop(mayTinhService.timKiemLapTopTheoTrongLuong(trongLuong));
-                return;
-            }
-            case 7 -> {
-                System.out.print("Nhập kích thước màn hình: ");
-                double kichThuoc = scanner.nextDouble();
-                scanner.nextLine();
-                hienThiLapTop(mayTinhService.timKiemLapTopTheoKichThuocManHinh(kichThuoc));
                 return;
             }
             case 8 -> {

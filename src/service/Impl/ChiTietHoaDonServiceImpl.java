@@ -77,13 +77,6 @@ public class ChiTietHoaDonServiceImpl implements ChiTietHoaDonService {
     }
 
     @Override
-    public List<ChiTietHoaDon> timChiTietHoaDonTheoMaHoaDon(String maHD) {
-        return danhSachChiTietHoaDon.stream()
-                .filter(cthd -> cthd.getMaHD().equalsIgnoreCase(maHD))
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public List<ChiTietHoaDon> timChiTietHoaDonTheoMaKhachHang(String maKH) {
         return danhSachChiTietHoaDon.stream()
                 .filter(cthd -> cthd.getMaKH().equalsIgnoreCase(maKH))
@@ -141,10 +134,26 @@ public class ChiTietHoaDonServiceImpl implements ChiTietHoaDonService {
 
     @Override
     public boolean xoaTatCaChiTietHoaDonTheoMaHoaDon(String maHD) {
-        boolean removed = danhSachChiTietHoaDon.removeIf(cthd -> cthd.getMaHD().equalsIgnoreCase(maHD));
-        if (removed)
+        try {
+            // Lọc ra các chi tiết không thuộc mã hóa đơn cần xóa
+            List<ChiTietHoaDon> danhSachConLai = danhSachChiTietHoaDon.stream()
+                    .filter(ct -> !ct.getMaHD().equals(maHD))
+                    .collect(Collectors.toList());
+
+            // Kiểm tra xem có xóa được không
+            if (danhSachConLai.size() == danhSachChiTietHoaDon.size()) {
+                System.out.println("Không có chi tiết hóa đơn nào thuộc mã: " + maHD);
+                return false;
+            }
+
+            // Gán lại danh sách và lưu file
+            danhSachChiTietHoaDon = danhSachConLai;
             saveData();
-        return removed;
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
@@ -171,35 +180,6 @@ public class ChiTietHoaDonServiceImpl implements ChiTietHoaDonService {
                 .filter(cthd -> cthd.getMaKH().equalsIgnoreCase(maKH))
                 .mapToDouble(ChiTietHoaDon::getThanhTien)
                 .sum();
-    }
-
-    @Override
-    public int demSoChiTietHoaDonTheoMaHoaDon(String maHD) {
-        return (int) danhSachChiTietHoaDon.stream()
-                .filter(cthd -> cthd.getMaHD().equalsIgnoreCase(maHD))
-                .count();
-    }
-
-    @Override
-    public ChiTietHoaDon layChiTietHoaDonCoThanhTienCaoNhat() {
-        return danhSachChiTietHoaDon.stream()
-                .max(Comparator.comparingDouble(ChiTietHoaDon::getThanhTien))
-                .orElse(null);
-    }
-
-    @Override
-    public ChiTietHoaDon layChiTietHoaDonCoThanhTienThapNhat() {
-        return danhSachChiTietHoaDon.stream()
-                .min(Comparator.comparingDouble(ChiTietHoaDon::getThanhTien))
-                .orElse(null);
-    }
-
-    @Override
-    public Double tinhThanhTienTrungBinh() {
-        return danhSachChiTietHoaDon.stream()
-                .mapToDouble(ChiTietHoaDon::getThanhTien)
-                .average()
-                .orElse(0.0);
     }
 
     @Override

@@ -119,22 +119,6 @@ public class MayTinhServiceImpl implements MayTinhService {
     }
 
     @Override
-    public List<MayTinh> timKiemMayTinhTheoKhoangGia(double giaMin, double giaMax) {
-        List<MayTinh> ketQua = new ArrayList<>();
-        for (PC pc : danhSachPC) {
-            if (pc.getGia() >= giaMin && pc.getGia() <= giaMax) {
-                ketQua.add(pc);
-            }
-        }
-        for (LapTop lap : danhSachLapTop) {
-            if (lap.getGia() >= giaMin && lap.getGia() <= giaMax) {
-                ketQua.add(lap);
-            }
-        }
-        return ketQua;
-    }
-
-    @Override
     public List<MayTinh> timKiemMayTinhTheoHangSX(String hangSX) {
         List<MayTinh> ketQua = new ArrayList<>();
         for (PC pc : danhSachPC) {
@@ -162,32 +146,10 @@ public class MayTinhServiceImpl implements MayTinhService {
     }
 
     @Override
-    public List<PC> timKiemPCTheoLoaiCPU(String loaiCPU) {
-        List<PC> ketQua = new ArrayList<>();
-        for (PC pc : danhSachPC) {
-            if (pc.getLoaiCPU().toLowerCase().contains(loaiCPU.toLowerCase())) {
-                ketQua.add(pc);
-            }
-        }
-        return ketQua;
-    }
-
-    @Override
     public List<LapTop> timKiemLapTopTheoTrongLuong(double trongLuong) {
         List<LapTop> ketQua = new ArrayList<>();
         for (LapTop lap : danhSachLapTop) {
             if (lap.getTrongLuong() == trongLuong) {
-                ketQua.add(lap);
-            }
-        }
-        return ketQua;
-    }
-
-    @Override
-    public List<LapTop> timKiemLapTopTheoKichThuocManHinh(double kichThuocManHinh) {
-        List<LapTop> ketQua = new ArrayList<>();
-        for (LapTop lap : danhSachLapTop) {
-            if (lap.getKichThuocManHinh() == kichThuocManHinh) {
                 ketQua.add(lap);
             }
         }
@@ -340,14 +302,15 @@ public class MayTinhServiceImpl implements MayTinhService {
             String line;
             while ((line = reader.readLine()) != null && !line.trim().isEmpty()) {
                 String[] p = line.split("\\|");
-                if (p.length == 6) {
+                if (p.length == 7) {
                     PC pc = new PC(
                             p[0], // maPC
                             p[1], // tenMay
                             p[2], // hangSX
                             Double.parseDouble(p[3]), // gia
-                            Integer.parseInt(p[4]), // ram
-                            p[5] // loaiCPU
+                            p[4],// ma NCC
+                            Integer.parseInt(p[5]), // ram
+                            p[6] // loaiCPU
                     );
                     danhSachPC.add(pc);
                     if (p[0].startsWith("PC")) {
@@ -380,8 +343,9 @@ public class MayTinhServiceImpl implements MayTinhService {
                             p[1], // tenMay
                             p[2], // hangSX
                             Double.parseDouble(p[3]), // gia
-                            Double.parseDouble(p[4]), // trongluong
-                            Double.parseDouble(p[5]) // kichThuocManHinh
+                            p[4],// ma NCC
+                            Double.parseDouble(p[5]), // trongluong
+                            Double.parseDouble(p[6]) // kichThuocManHinh
 
                     );
                     danhSachLapTop.add(lap);

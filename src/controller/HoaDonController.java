@@ -122,7 +122,6 @@ public class HoaDonController {
         System.out.println("\n=== TÌM KIẾM HÓA ĐƠN ===");
         System.out.println("1. Theo mã hóa đơn");
         System.out.println("2. Theo mã khách hàng");
-        System.out.println("3. Theo trạng thái");
         System.out.print("Chọn: ");
         int c = scanner.nextInt();
         scanner.nextLine();
@@ -143,15 +142,6 @@ public class HoaDonController {
                 List<HoaDon> ds = hoaDonService.timHoaDonTheoMaKhachHang(maKH);
                 if (ds.isEmpty())
                     System.out.println(" Không tìm thấy hóa đơn!");
-                else
-                    ds.forEach(this::hienThiThongTinHoaDon);
-            }
-            case 3 -> {
-                System.out.print("Nhập trạng thái (Chưa thanh toán/Đã thanh toán/Đã hủy): ");
-                String tt = scanner.nextLine();
-                List<HoaDon> ds = hoaDonService.timHoaDonTheoTrangThai(tt);
-                if (ds.isEmpty())
-                    System.out.println(" Không có hóa đơn nào phù hợp!");
                 else
                     ds.forEach(this::hienThiThongTinHoaDon);
             }

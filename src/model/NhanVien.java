@@ -4,30 +4,30 @@ import java.sql.Date;
 
 public class NhanVien {
     private String maNV;
-    private String hoTen;
+    private String tenNV;
     private Date ngaySinh;
     private String gioiTinh;
     private String diaChi;
     private String vaiTro; // vai trò (admin,nhanvien,quanly,...)
-    private String Email;
-    private String CMND;
-    private String SDT;
+    private String email;
+    private String cmnd;
+    private String soDienThoai;
     private Double luong;
 
     public NhanVien() {
-    };
+    }
 
-    public NhanVien(String maNV, String hoTen, Date ngaySinh, String gioiTinh, String diaChi, String vaiTro,
-            String CMND, String SDT, String Email, Double luong) {
+    public NhanVien(String maNV, String tenNV, Date ngaySinh, String gioiTinh, String diaChi, String vaiTro,
+            String cmnd, String soDienThoai, String email, Double luong) {
         this.maNV = maNV;
-        this.hoTen = hoTen;
+        this.tenNV = tenNV;
         this.ngaySinh = ngaySinh;
         this.gioiTinh = gioiTinh;
         this.diaChi = diaChi;
         this.vaiTro = vaiTro;
-        this.CMND = CMND;
-        this.SDT = SDT;
-        this.Email = Email;
+        this.cmnd = cmnd;
+        this.soDienThoai = soDienThoai;
+        this.email = email;
         this.luong = luong;
     }
 
@@ -40,12 +40,12 @@ public class NhanVien {
         this.maNV = maNV;
     }
 
-    public String getHoTen() {
-        return hoTen;
+    public String getTenNV() {
+        return tenNV;
     }
 
-    public void setHoTen(String hoTen) {
-        this.hoTen = hoTen;
+    public void setTenNV(String tenNV) {
+        this.tenNV = tenNV;
     }
 
     public Date getNgaySinh() {
@@ -81,27 +81,27 @@ public class NhanVien {
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
-    public void setEmail(String Email) {
-        this.Email = Email;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getCMND() {
-        return CMND;
+        return cmnd;
     }
 
-    public void setCMND(String CMND) {
-        this.CMND = CMND;
+    public void setCMND(String cmnd) {
+        this.cmnd = cmnd;
     }
 
-    public String getSDT() {
-        return SDT;
+    public String getSoDienThoai() {
+        return soDienThoai;
     }
 
-    public void setSDT(String SDT) {
-        this.SDT = SDT;
+    public void setSoDienThoai(String soDienThoai) {
+        this.soDienThoai = soDienThoai;
     }
 
     public Double getLuong() {
@@ -114,8 +114,8 @@ public class NhanVien {
 
     @Override
     public String toString() {
-        return "NhanVien [maNV:" + maNV + ", hoTen:" + hoTen + ",ngaySinh:" + ngaySinh + ",gioiTinh:" + gioiTinh
-                + ", diaChi:" + diaChi + ", vaiTro:" + vaiTro +
-                ",Email:" + Email + "CMND:" + CMND + ", SDT:" + SDT + ", luong:" + luong + "]";
+        return "NhanVien [Ma NV:" + maNV + ", Ten NV:" + tenNV + ", Ngay Sinh:" + ngaySinh + ", Gioi tinh:" + gioiTinh
+                + ", Dia Chi:" + diaChi + ", Vai tro:" + vaiTro +
+                ", Email:" + email + ", CMND:" + cmnd + ", SDT:" + soDienThoai + ", Luong:" + luong + "]";
     }
 }

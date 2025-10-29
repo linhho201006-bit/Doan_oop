@@ -57,32 +57,10 @@ public class NhanVienServiceImpl implements NhanVienService {
     }
 
     @Override
-    public List<NhanVien> timNhanVienTheoHoTen(String hoTen) {
+    public List<NhanVien> timNhanVienTheoHoTen(String tenNV) {
         List<NhanVien> ketQua = new ArrayList<>();
         for (NhanVien nv : danhSachnhanvien) {
-            if (nv.getHoTen().toLowerCase().contains(hoTen.toLowerCase())) {
-                ketQua.add(nv);
-            }
-        }
-        return ketQua;
-    }
-
-    @Override
-    public List<NhanVien> timNhanVienTheoCMND(String CMND) {
-        List<NhanVien> ketQua = new ArrayList<>();
-        for (NhanVien nv : danhSachnhanvien) {
-            if (nv.getCMND().toLowerCase().contains(CMND.toLowerCase())) {
-                ketQua.add(nv);
-            }
-        }
-        return ketQua;
-    }
-
-    @Override
-    public List<NhanVien> timNhanVienTheoSDT(String SDT) {
-        List<NhanVien> ketQua = new ArrayList<>();
-        for (NhanVien nv : danhSachnhanvien) {
-            if (nv.getSDT().toLowerCase().contains(SDT.toLowerCase())) {
+            if (nv.getTenNV().toLowerCase().contains(tenNV.toLowerCase())) {
                 ketQua.add(nv);
             }
         }
@@ -94,9 +72,9 @@ public class NhanVienServiceImpl implements NhanVienService {
         List<NhanVien> ketQua = new ArrayList<>();
         String tuKhoaLower = tuKhoa.toLowerCase();
         for (NhanVien nv : danhSachnhanvien) {
-            if (nv.getHoTen().toLowerCase().contains(tuKhoaLower) ||
+            if (nv.getTenNV().toLowerCase().contains(tuKhoaLower) ||
                     nv.getDiaChi().toLowerCase().contains(tuKhoaLower) ||
-                    nv.getSDT().contains(tuKhoa) ||
+                    nv.getSoDienThoai().contains(tuKhoa) ||
                     nv.getEmail().toLowerCase().contains(tuKhoaLower)) {
                 ketQua.add(nv);
             }
@@ -129,13 +107,13 @@ public class NhanVienServiceImpl implements NhanVienService {
         try (PrintWriter writer = new PrintWriter(new FileWriter(FILE_PATH))) {
             for (NhanVien nv : danhSachnhanvien) {
                 writer.println(nv.getMaNV() + "|" +
-                        nv.getHoTen() + "|" +
+                        nv.getTenNV() + "|" +
                         (nv.getNgaySinh() != null ? nv.getNgaySinh().toString() : "null") + "|" +
                         nv.getGioiTinh() + "|" +
                         nv.getDiaChi() + "|" +
                         nv.getVaiTro() + "|" +
                         nv.getCMND() + "|" +
-                        nv.getSDT() + "|" +
+                        nv.getSoDienThoai() + "|" +
                         nv.getEmail() + "|" +
                         (nv.getLuong() != null ? nv.getLuong() : "null"));
             }

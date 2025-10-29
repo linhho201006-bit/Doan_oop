@@ -2,16 +2,17 @@ package model;
 
 public class NhaCungCap {
     private String maNCC;
-    private String hang;
+    private String hangSX;
     private String tenNCC;
     private String nguoiDaiDien;
     private String diaChi;
     private String soDienThoai;
     private String email;
 
-    public NhaCungCap(String maNCC, String hang, String tenNCC, String nguoiDaiDien, String diaChi, String soDienThoai, String email) {
+    public NhaCungCap(String maNCC, String hangSX, String tenNCC, String nguoiDaiDien, String diaChi,
+            String soDienThoai, String email) {
         this.maNCC = maNCC;
-        this.hang = hang;
+        this.hangSX = hangSX;
         this.tenNCC = tenNCC;
         this.nguoiDaiDien = nguoiDaiDien;
         this.diaChi = diaChi;
@@ -28,12 +29,12 @@ public class NhaCungCap {
         this.maNCC = maNCC;
     }
 
-    public String getHang() {
-        return hang;
+    public String getHangSX() {
+        return hangSX;
     }
 
-    public void setHang(String hang) {
-        this.hang = hang;
+    public void setHangSX(String hangSX) {
+        this.hangSX = hangSX;
     }
 
     public String getTenNCC() {
@@ -78,8 +79,8 @@ public class NhaCungCap {
 
     @Override
     public String toString() {
-        return "NhaCungCap [maNCC:" + maNCC + ", hang:" + hang + ", tenNCC:" + tenNCC +
-                ", nguoiDaiDien:" + nguoiDaiDien + ", diaChi:" + diaChi +
-                ", soDienThoai:" + soDienThoai + ", email:" + email + "]";
+        return "NhaCungCap [Ma NCC:" + maNCC + ", Hang SX:" + hangSX + ", Ten NCC:" + tenNCC +
+                ", Nguoi dai dien:" + nguoiDaiDien + ", Dia chi:" + diaChi +
+                ", So dien thoai:" + soDienThoai + ", Email:" + email + "]";
     }
 }

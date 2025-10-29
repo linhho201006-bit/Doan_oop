@@ -29,42 +29,31 @@ public class NhanVienController {
             System.out.print("Chọn chức năng: ");
 
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine();
 
             switch (choice) {
-                case 1:
-                    themNhanVien();
-                    break;
-                case 2:
-                    hienThiTatCaNhanVien();
-                    break;
-                case 3:
-                    timKiemNhanVien();
-                    break;
-                case 4:
-                    capNhatNhanVien();
-                    break;
-                case 5:
-                    xoaNhanVien();
-                    break;
-                case 0:
-                    System.out.println("Cảm ơn bạn đã sử dụng chương trình!");
+                case 1 -> themNhanVien();
+                case 2 -> hienThiTatCaNhanVien();
+                case 3 -> timKiemNhanVien();
+                case 4 -> capNhatNhanVien();
+                case 5 -> xoaNhanVien();
+                case 0 -> {
+                    System.out.println("Thoát khỏi quản lý nhân viên.");
                     return;
-                default:
-                    System.out.println("Lựa chọn không hợp lệ!");
+                }
+                default -> System.out.println("Lựa chọn không hợp lệ!");
             }
         }
     }
 
     private void themNhanVien() {
-        System.out.println("\n=== THÊM MỚI NHÂN VIÊN ===");
+        System.out.println("\n=== THÊM NHÂN VIÊN MỚI ===");
 
-        System.out.print("Tên nhân viên: ");
-        String hoTen = scanner.nextLine();
+        System.out.print("Họ và tên: ");
+        String tenNV = scanner.nextLine();
 
-        System.out.print("Nhập ngày sinh (yyyy-mm-dd): ");
-        String ngaySinhNV = scanner.nextLine();
-        Date ngaySinh = Date.valueOf(ngaySinhNV);
+        System.out.print("Ngày sinh (yyyy-mm-dd): ");
+        Date ngaySinh = Date.valueOf(scanner.nextLine());
 
         System.out.print("Giới tính: ");
         String gioiTinh = scanner.nextLine();
@@ -76,49 +65,46 @@ public class NhanVienController {
         String vaiTro = scanner.nextLine();
 
         System.out.print("CMND: ");
-        String CMND = scanner.nextLine();
+        String cmnd = scanner.nextLine();
 
         System.out.print("Số điện thoại: ");
-        String SDT = scanner.nextLine();
+        String soDienThoai = scanner.nextLine();
 
         System.out.print("Email: ");
-        String Email = scanner.nextLine();
+        String email = scanner.nextLine();
 
         Double luong = nhapLuong();
 
-        NhanVien nhanVien = new NhanVien("", hoTen, ngaySinh, gioiTinh, diaChi, vaiTro, CMND, SDT, Email, luong);
+        // Khởi tạo đúng theo constructor trong NhanVien.java
+        NhanVien nhanVien = new NhanVien("", tenNV, ngaySinh, gioiTinh, diaChi, vaiTro, cmnd, soDienThoai, email,
+                luong);
 
         if (nhanVienService.themNhanVien(nhanVien)) {
-            System.out.println("Thêm thành công! Mã nhân viên: " + nhanVien.getMaNV());
+            System.out.println("✅ Thêm nhân viên thành công!");
         } else {
-            System.out.println("Lỗi khi thêm nhân viên!");
+            System.out.println("❌ Thêm nhân viên thất bại!");
         }
     }
 
     private void hienThiTatCaNhanVien() {
-        System.out.println("\n=== DANH SÁCH TẤT CẢ NHÂN VIÊN ===");
-        List<NhanVien> danhSachnhanvien = nhanVienService.layTatCaNhanVien();
+        System.out.println("\n=== DANH SÁCH NHÂN VIÊN ===");
+        List<NhanVien> danhSach = nhanVienService.layTatCaNhanVien();
 
-        if (danhSachnhanvien.isEmpty()) {
+        if (danhSach.isEmpty()) {
             System.out.println("Không có dữ liệu!");
-        } else {
-            System.out.printf("%-8s %-20s %-12s %-8s %-20s %-15s %-12s %-25s %-12s %-10.1s%n",
-                    "Mã NV", "Họ tên", "Ngày sinh", "Giới tính", "Địa chỉ", "Vai trò", "CMND", "Email", "SĐT", "Lương");
-            System.out.println("=".repeat(160));
+            return;
+        }
 
-            for (NhanVien nv : danhSachnhanvien) {
-                System.out.printf("%-8s %-20s %-12s %-8s %-20s %-15s %-12s %-25s %-12s %-10.1f%n",
-                        nv.getMaNV(),
-                        nv.getHoTen(),
-                        nv.getNgaySinh(),
-                        nv.getGioiTinh(),
-                        nv.getDiaChi(),
-                        nv.getVaiTro(),
-                        nv.getCMND(),
-                        nv.getEmail(),
-                        nv.getSDT(),
-                        nv.getLuong());
-            }
+        System.out.printf("%-8s %-20s %-12s %-8s %-20s %-15s %-12s %-25s %-12s %-10s%n",
+                "Mã NV", "Họ tên", "Ngày sinh", "Giới tính", "Địa chỉ", "Vai trò",
+                "CMND", "Email", "SĐT", "Lương");
+        System.out.println("=".repeat(150));
+
+        for (NhanVien nv : danhSach) {
+            System.out.printf("%-8s %-20s %-12s %-8s %-20s %-15s %-12s %-25s %-12s %-10.1f%n",
+                    nv.getMaNV(), nv.getTenNV(), nv.getNgaySinh(), nv.getGioiTinh(),
+                    nv.getDiaChi(), nv.getVaiTro(), nv.getCMND(), nv.getEmail(),
+                    nv.getSoDienThoai(), nv.getLuong());
         }
     }
 
@@ -126,9 +112,7 @@ public class NhanVienController {
         System.out.println("\n=== TÌM KIẾM NHÂN VIÊN ===");
         System.out.println("1. Tìm theo mã nhân viên");
         System.out.println("2. Tìm theo họ tên");
-        System.out.println("3. Tìm theo CMND");
-        System.out.println("4. Tìm theo số điện thoại");
-        System.out.println("5. Tìm kiếm tổng hợp");
+        System.out.println("3. Tìm kiếm tổng hợp");
         System.out.print("Chọn loại tìm kiếm: ");
 
         int choice = scanner.nextInt();
@@ -137,180 +121,101 @@ public class NhanVienController {
         List<NhanVien> ketQua = null;
 
         switch (choice) {
-            case 1:
+            case 1 -> {
                 System.out.print("Nhập mã nhân viên: ");
-                String maNV = scanner.nextLine();
-                NhanVien nv = nhanVienService.timNhanVienTheoMa(maNV);
-                if (nv != null) {
-                    ketQua = List.of(nv);
-                } else {
-                    ketQua = List.of();
-                }
-                break;
-            case 2:
+                String ma = scanner.nextLine();
+                NhanVien nv = nhanVienService.timNhanVienTheoMa(ma);
+                ketQua = (nv != null) ? List.of(nv) : List.of();
+            }
+            case 2 -> {
                 System.out.print("Nhập họ tên: ");
-                String hoTen = scanner.nextLine();
-                ketQua = nhanVienService.timNhanVienTheoHoTen(hoTen);
-                break;
-            case 3:
-                System.out.print("Nhập CMND: ");
-                String CMND = scanner.nextLine();
-                ketQua = nhanVienService.timNhanVienTheoCMND(CMND);
-                break;
-            case 4:
-                System.out.print("Nhập số điện thoại: ");
-                String SDT = scanner.nextLine();
-                ketQua = nhanVienService.timNhanVienTheoSDT(SDT);
-                break;
-            case 5:
+                String ten = scanner.nextLine();
+                ketQua = nhanVienService.timNhanVienTheoHoTen(ten);
+            }
+            case 3 -> {
                 System.out.print("Nhập từ khóa tìm kiếm: ");
                 String tuKhoa = scanner.nextLine();
                 ketQua = nhanVienService.timKiemNhanVien(tuKhoa);
-                break;
-            default:
-                System.out.println("Lựa chọn không hợp lệ!");
-                return;
+            }
+            default -> System.out.println("Lựa chọn không hợp lệ!");
         }
 
         hienThiKetQuaTimKiem(ketQua);
     }
 
-    // Hiển thị kết quả tìm kiếm
     private void hienThiKetQuaTimKiem(List<NhanVien> ketQua) {
         if (ketQua == null || ketQua.isEmpty()) {
             System.out.println("Không tìm thấy nhân viên nào!");
-        } else {
-            System.out.printf("%-8s %-20s %-12s %-8s %-20s %-15s %-12s %-25s %-12s %-10.1s%n",
-                    "Mã NV", "Họ tên", "Ngày sinh", "Giới tính", "Địa chỉ", "Vai trò", "CMND", "Email", "SĐT", "Lương");
-            System.out.println("=".repeat(160));
+            return;
+        }
 
-            for (NhanVien nv : ketQua) {
-                System.out.printf("%-8s %-20s %-12s %-8s %-20s %-15s %-12s %-25s %-12s %-10.1f%n",
-                        nv.getMaNV(),
-                        nv.getHoTen(),
-                        nv.getNgaySinh(),
-                        nv.getGioiTinh(),
-                        nv.getDiaChi(),
-                        nv.getVaiTro(),
-                        nv.getCMND(),
-                        nv.getEmail(),
-                        nv.getSDT(),
-                        nv.getLuong());
-            }
+        System.out.printf("%-8s %-20s %-12s %-8s %-20s %-15s %-12s %-25s %-12s %-10s%n",
+                "Mã NV", "Họ tên", "Ngày sinh", "Giới tính", "Địa chỉ", "Vai trò",
+                "CMND", "Email", "SĐT", "Lương");
+        System.out.println("=".repeat(150));
+
+        for (NhanVien nv : ketQua) {
+            System.out.printf("%-8s %-20s %-12s %-8s %-20s %-15s %-12s %-25s %-12s %-10.1f%n",
+                    nv.getMaNV(), nv.getTenNV(), nv.getNgaySinh(), nv.getGioiTinh(),
+                    nv.getDiaChi(), nv.getVaiTro(), nv.getCMND(), nv.getEmail(),
+                    nv.getSoDienThoai(), nv.getLuong());
         }
     }
 
     private void capNhatNhanVien() {
-        System.out.println("\n=== CẬP NHẬT NHÂN VIÊN ===");
-        System.out.print("Nhập mã nhân viên cần cập nhật: ");
-        String maNV = scanner.nextLine();
+        System.out.print("\nNhập mã nhân viên cần cập nhật: ");
+        String ma = scanner.nextLine();
+        NhanVien nv = nhanVienService.timNhanVienTheoMa(ma);
 
-        NhanVien nhanVien = nhanVienService.timNhanVienTheoMa(maNV);
-
-        if (nhanVien == null) {
-            System.out.println("Không tìm thấy nhân viên: " + maNV);
+        if (nv == null) {
+            System.out.println("Không tìm thấy nhân viên!");
             return;
         }
+
         System.out.println("Thông tin hiện tại:");
-        System.out.println(nhanVien);
+        System.out.println(nv);
 
-        System.out.println("\nNhập thông tin mới (để trống nếu không thay đổi):");
+        System.out.print("Tên mới (Enter để giữ nguyên): ");
+        String tenMoi = scanner.nextLine();
+        if (!tenMoi.trim().isEmpty())
+            nv.setTenNV(tenMoi);
 
-        System.out.print("Họ và tên [" + nhanVien.getHoTen() + "]: ");
-        String hoTen = scanner.nextLine();
-        if (!hoTen.trim().isEmpty()) {
-            nhanVien.setHoTen(hoTen);
-        }
+        System.out.print("Địa chỉ mới (Enter để giữ nguyên): ");
+        String diaChiMoi = scanner.nextLine();
+        if (!diaChiMoi.trim().isEmpty())
+            nv.setDiaChi(diaChiMoi);
 
-        System.out.print("Ngày sinh [" + nhanVien.getNgaySinh() + "] (yyyy-mm-dd): ");
-        String ngaySinhNV = scanner.nextLine();
-        if (!ngaySinhNV.trim().isEmpty()) {
-            nhanVien.setNgaySinh(Date.valueOf(ngaySinhNV));
-        }
+        System.out.print("Lương mới (Enter để giữ nguyên): ");
+        String luongStr = scanner.nextLine();
+        if (!luongStr.trim().isEmpty())
+            nv.setLuong(Double.parseDouble(luongStr));
 
-        System.out.print("Giới tính [" + nhanVien.getGioiTinh() + "]: ");
-        String gioiTinh = scanner.nextLine();
-        if (!gioiTinh.trim().isEmpty()) {
-            nhanVien.setGioiTinh(gioiTinh);
-        }
-
-        System.out.print("Địa chỉ [" + nhanVien.getDiaChi() + "]: ");
-        String diaChi = scanner.nextLine();
-        if (!diaChi.trim().isEmpty()) {
-            nhanVien.setDiaChi(diaChi);
-        }
-
-        System.out.print("Vai Trò [" + nhanVien.getVaiTro() + "]: ");
-        String vaiTro = scanner.nextLine();
-        if (!vaiTro.trim().isEmpty()) {
-            nhanVien.setVaiTro(vaiTro);
-        }
-
-        System.out.print("CMND [" + nhanVien.getCMND() + "]: ");
-        String CMND = scanner.nextLine();
-        if (!CMND.trim().isEmpty()) {
-            nhanVien.setCMND(CMND);
-        }
-
-        System.out.print("Số điện thoại [" + nhanVien.getSDT() + "]: ");
-        String SDT = scanner.nextLine();
-        if (!SDT.trim().isEmpty()) {
-            nhanVien.setSDT(SDT);
-        }
-
-        System.out.print("Lương [" + nhanVien.getLuong() + "]: ");
-        String luongStr = scanner.nextLine(); // đọc dạng chuỗi
-
-        if (!luongStr.trim().isEmpty()) { // nếu không trống
-            double luong = Double.parseDouble(luongStr); // chuyển sang double
-            nhanVien.setLuong(luong);
-        }
-
-        if (nhanVienService.capNhatNhanVien(nhanVien)) {
-            System.out.println("Cập nhật thông tin nhân viên thành công!");
+        if (nhanVienService.capNhatNhanVien(nv)) {
+            System.out.println("Cập nhật thành công!");
         } else {
-            System.out.println("Lỗi khi cập nhật thông tin nhân viên!");
+            System.out.println("Cập nhật thất bại!");
         }
     }
 
     private void xoaNhanVien() {
-        System.out.println("\n=== XÓA NHÂN VIÊN ===");
-        System.out.print("Nhập mã nhân viên cần xóa: ");
-        String maNV = scanner.nextLine();
+        System.out.print("\nNhập mã nhân viên cần xóa: ");
+        String ma = scanner.nextLine();
 
-        NhanVien nhanVien = nhanVienService.timNhanVienTheoMa(maNV);
-        if (nhanVien == null) {
-            System.out.println("Không tìm thấy nhân viên với mã: " + maNV);
-            return;
-        }
-
-        System.out.println("Thông tin nhân viên sẽ bị xóa:");
-        System.out.println(nhanVien);
-        System.out.print("Bạn có chắc chắn muốn xóa? (y/n): ");
-        String confirm = scanner.nextLine();
-
-        if (confirm.toLowerCase().equals("y") || confirm.toLowerCase().equals("yes")) {
-            if (nhanVienService.xoaNhanVien(maNV)) {
-                System.out.println("Xóa nhân viên thành công!");
-            } else {
-                System.out.println("Lỗi khi xóa nhân viên!");
-            }
+        if (nhanVienService.xoaNhanVien(ma)) {
+            System.out.println("Xóa nhân viên thành công!");
         } else {
-            System.out.println("Hủy bỏ việc xóa nhân viên.");
+            System.out.println("Không tìm thấy nhân viên hoặc xóa thất bại!");
         }
     }
 
-    private Double nhapLuong(boolean... optional) {
+    private Double nhapLuong() {
         while (true) {
             System.out.print("Lương: ");
             String input = scanner.nextLine();
-            if (optional.length > 0 && optional[0] && input.trim().isEmpty()) {
-                return null;
-            }
             try {
                 return Double.parseDouble(input);
             } catch (NumberFormatException e) {
-                System.out.println("Lương phải là một số. Vui lòng nhập lại.");
+                System.out.println("Lương phải là số!");
             }
         }
     }
